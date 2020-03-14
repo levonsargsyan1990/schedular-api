@@ -38,7 +38,10 @@ jobs:
                     ssh $SSH_USER@$SSH_HOST "docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY};
                         docker stop $NAME || true && docker rm $NAME || true;
                         docker pull $IMAGE:$CIRCLE_SHA1;
+<<<<<<< HEAD
                         docker run -d -p 8000:8000 -e JWT_SECRET='${JWT_SECRET}' -e PORT=4000 -e MONGO_URL='${MONGO_URL}' --name ${NAME} ${IMAGE}:${CIRCLE_SHA1}"
+=======
+>>>>>>> development
 workflows:
     version: 2.1
     # 'deploy-prod':
