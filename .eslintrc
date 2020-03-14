@@ -1,0 +1,14 @@
+{
+  "extends": "airbnb",
+  "overrides": [
+    {
+      "files": [
+        "*.js"
+      ],
+      "rules": {
+        "import/prefer-default-export": "off",
+        "no-underscore-dangle": "off"
+      }
+    }
+  ]
+}

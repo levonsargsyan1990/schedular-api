@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  schedule-api:
+    image: node:12.10.0-alpine
+    volumes:
+      - .:/schedule-api
+    working_dir: /schedule-api
+    command: sh -c 'npm i && npm run dev'
+    env_file: .env
+    ports:
+      - 8000:8000
+
+      

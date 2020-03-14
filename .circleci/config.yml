@@ -1,0 +1,71 @@
+version: 2.1
+executors:
+    docker:
+        docker:
+            - image: docker
+commands:
+    'docker-login':
+        description: "Login to docker registry"
+        steps:
+        - run: docker login -u $CI_REGISTRY_USER -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+jobs:
+    'docker-build':
+        executor: docker
+        working_directory: ~/app
+        steps:
+            - setup_remote_docker
+            - checkout
+            - docker-login
+            - run:
+                name: Building docker image
+                shell: /bin/sh
+                command: |
+                    docker build -t $IMAGE:latest -t $IMAGE:$CIRCLE_SHA1 .
+                    docker push $IMAGE:latest
+                    docker push $IMAGE:$CIRCLE_SHA1
+
+    'deploy-staging':
+        machine:
+            enabled: true
+        steps:
+            - add_ssh_keys:
+                fingerprints:
+                  - "d3:a0:10:9f:12:f2:32:e6:f9:22:86:fd:d5:2d:84:2e"
+            - run:
+                name: Start docker container
+                shell: /bin/sh
+                command: |
+                    ssh $SSH_USER@$SSH_HOST "docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY};
+                        docker stop $NAME || true && docker rm $NAME || true;
+                        docker pull $IMAGE:$CIRCLE_SHA1;
+                        docker run -d -p 8000:8000 -e PORT=4000 -e MONGO_URL='${MONGO_URL}' --name ${NAME} ${IMAGE}:${CIRCLE_SHA1}"
+workflows:
+    version: 2.1
+    # 'deploy-prod':
+    #     jobs:
+    #         - docker-build:
+    #             filters:
+    #                 branches:
+    #                     only: master
+
+    #         - deploy-prod:
+    #             requires:
+    #               - docker-build
+    #             filters:
+    #                 branches:
+    #                     only: master
+    'deploy-staging':
+        jobs:
+            - docker-build:
+                filters:
+                    branches:
+                        only: staging
+
+            - deploy-staging:
+                requires:
+                    - docker-build
+                filters:
+                    branches:
+                        only: staging
+                
+
