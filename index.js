@@ -17,14 +17,19 @@ const { PORT = 8000 } = process.env;
 
 const app = express();
 
-// Adding body parser middleware
+// parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// parse application/json
+app.use(bodyParser.json());
+
 // Initializing passport middleware
-app.use(passport.initialize());
+// app.use(passport.initialize());
 
 app.get('/health', checkHealth);
 
 app.post('/login', login);
+
+app.get('/secure', passport.authenticate('jwt', { session: false }), (req, res) => { console.log('SECURE'); });
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
