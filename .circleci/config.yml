@@ -30,7 +30,7 @@ jobs:
         steps:
             - add_ssh_keys:
                 fingerprints:
-                  - "3f:c4:05:bd:38:d2:cf:a4:a5:6f:e6:f1:82:c9:9e:16"
+                  - "d3:a0:10:9f:12:f2:32:e6:f9:22:86:fd:d5:2d:84:2e"
             - run:
                 name: Start docker container
                 shell: /bin/sh
@@ -59,13 +59,13 @@ workflows:
             - docker-build:
                 filters:
                     branches:
-                        only: development
+                        only: staging
 
-            # - deploy-staging:
-            #     requires:
-            #         - docker-build
-            #     filters:
-            #         branches:
-            #             only: staging
+            - deploy-staging:
+                requires:
+                    - docker-build
+                filters:
+                    branches:
+                        only: staging
                 
 
