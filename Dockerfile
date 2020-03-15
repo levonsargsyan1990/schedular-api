@@ -8,4 +8,4 @@ RUN npm install
 COPY . /schedule-api/
 
 RUN npm run build
-CMD ["node","/schedule-api/dist/index.js"]
+CMD ["node","/schedule-api/dist/server.js"]
