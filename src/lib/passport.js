@@ -3,7 +3,7 @@ import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 
 // import models
-import Organization from '../models/organizations';
+import Organization from '../models/organization';
 
 export const init = () => {
   passport.use(
@@ -46,10 +46,9 @@ export const init = () => {
         }).exec();
         if (organization) {
           console.log('Organization found in db in passport');
-          // note the return removed with passport JWT - add this return for passport local
           done(null, organization);
         } else {
-          done(null, false);
+          done(null, null);
         }
       } catch (err) {
         done(err);
