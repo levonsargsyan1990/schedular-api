@@ -1,10 +1,15 @@
 import Service from '../../models/service.model';
 
-export const get = async (req, res, next) => {
-  const { user: organization } = req;
-  console.log('==================');
-  console.log('PARMS', req.params);
-  const services = await Service.findOne({ organizationId: organization._id }).exec();
-  console.log('List services');
-  console.log(res.send(services));
-}
+/**
+ * Finds the service by serviceId
+ *
+ * @param {Object} req - Request object
+ * @param {Object} req.params - Request params
+ * @param {string} req.params.serviceId - Id of service
+ * @param {Object} res - Response object
+ */
+export const get = async (req, res) => {
+  const { serviceId } = req.params;
+  const services = await Service.findOne({ _id: serviceId }).exec();
+  res.send(services);
+};

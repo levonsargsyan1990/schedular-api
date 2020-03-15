@@ -7,6 +7,7 @@ config({
 });
 
 const {
+  NODE_ENV,
   PORT,
   JWT_SECRET,
   MONGO_URL,
@@ -14,6 +15,7 @@ const {
 } = process.env;
 
 const variables = {
+  environment: NODE_ENV,
   port: PORT,
   jwt: {
     secret: JWT_SECRET,
