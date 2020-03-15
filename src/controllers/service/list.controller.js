@@ -1,4 +1,4 @@
-import Service from '../../models/service';
+import Service from '../../models/service.model';
 
 export const list = async (req, res, next) => {
   const { user: organization } = req;

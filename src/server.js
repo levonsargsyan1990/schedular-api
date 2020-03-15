@@ -2,7 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import passport from 'passport';
 
-import { port } from './config/env';
+import env from './config/env';
 import { init as initDatabase } from './lib/mongo';
 import { init as initPassport } from './lib/passport';
 import { checkHealth } from './controllers/health';
@@ -30,4 +30,4 @@ app.post('/login', login);
 
 app.use(passport.authenticate('jwt', { session: false }), router);
 
-app.listen(port, () => console.log(`Server running on port ${port}`));
+app.listen(env.port, () => console.log(`Server running on port ${env.port}`));

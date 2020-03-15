@@ -1,10 +1,10 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
-import { jwt as jwtConfig } from '../config/env';
+import env from '../config/env';
 
 // import models
-import Organization from '../models/organization';
+import Organization from '../models/organization.model';
 
 export const init = () => {
   passport.use(
@@ -31,7 +31,7 @@ export const init = () => {
 
   const jwtOptions = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: jwtConfig.secret,
+    secretOrKey: env.jwt.secret,
   };
 
   passport.use(

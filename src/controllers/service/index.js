@@ -1,1 +1,3 @@
-export * from './list';
+export * from './get.controller';
+export * from './list.controller';
+export * from './create.controller';

@@ -13,7 +13,7 @@ const {
   JWT_EXPIRATION_MINUTES,
 } = process.env;
 
-module.exports = {
+const variables = {
   port: PORT,
   jwt: {
     secret: JWT_SECRET,
@@ -23,3 +23,5 @@ module.exports = {
     url: MONGO_URL,
   },
 };
+
+export default variables;
