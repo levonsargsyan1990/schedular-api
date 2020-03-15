@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
+import { mongo } from '../config/env';
 
 export const init = () => {
-    const { MONGO_URL } = process.env;
-    mongoose.connect(MONGO_URL);
-}
+  mongoose.connect(mongo.url);
+};

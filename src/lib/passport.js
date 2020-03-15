@@ -1,6 +1,7 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
+import { jwt as jwtConfig } from '../config/env';
 
 // import models
 import Organization from '../models/organization';
@@ -28,11 +29,9 @@ export const init = () => {
     ),
   );
 
-  const { JWT_SECRET } = process.env;
-
   const jwtOptions = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: JWT_SECRET,
+    secretOrKey: jwtConfig.secret,
   };
 
   passport.use(
