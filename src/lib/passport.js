@@ -1,9 +1,10 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
+import env from '../config/env';
 
 // import models
-import Organization from '../models/organizations';
+import Organization from '../models/organization.model';
 
 export const init = () => {
   passport.use(
@@ -28,11 +29,9 @@ export const init = () => {
     ),
   );
 
-  const { JWT_SECRET } = process.env;
-
   const jwtOptions = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: JWT_SECRET,
+    secretOrKey: env.jwt.secret,
   };
 
   passport.use(
@@ -46,10 +45,9 @@ export const init = () => {
         }).exec();
         if (organization) {
           console.log('Organization found in db in passport');
-          // note the return removed with passport JWT - add this return for passport local
           done(null, organization);
         } else {
-          done(null, false);
+          done(null, null);
         }
       } catch (err) {
         done(err);

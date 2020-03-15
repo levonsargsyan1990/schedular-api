@@ -1,8 +1,9 @@
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
 
+import env from '../../config/env';
+
 export const login = (req, res, next) => {
-  const { JWT_SECRET } = process.env;
   passport.authenticate('login', async (err, organization, info) => {
     if (err) {
       console.log(err);
@@ -10,7 +11,7 @@ export const login = (req, res, next) => {
     if (info) {
       res.send(info.message);
     } else {
-      const token = jwt.sign({ organizationId: organization._id }, JWT_SECRET);
+      const token = jwt.sign({ organizationId: organization._id }, env.jwt.secret);
       res.status(200).send({
         token,
       });
