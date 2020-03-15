@@ -9,7 +9,7 @@ import Service from '../../models/service.model';
  * @param {Object} res - Response object
  */
 export const get = async (req, res) => {
-  const { user: organization } = req;
-  const services = await Service.findOne({ organizationId: organization._id }).exec();
+  const { serviceId } = req.params;
+  const services = await Service.findOne({ _id: serviceId }).exec();
   res.send(services);
 };
