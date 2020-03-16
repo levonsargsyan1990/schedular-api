@@ -13,8 +13,8 @@ export const list = async (req, res, next) => {
   try {
     const { user: { _id: organizationId } } = req;
     const organization = await Organization.findOne({ _id: organizationId }).exec();
-    const providers = await organization.providersAsync();
-    return new Success({ data: providers, res }).send();
+    const bookings = await organization.bookingsAsync();
+    return new Success({ data: bookings, res }).send();
   } catch (err) {
     next(err);
   }

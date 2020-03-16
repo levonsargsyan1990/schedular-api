@@ -7,11 +7,11 @@ const router = express.Router();
 
 router
   .route('/')
-  // .get(list)
+  .get(list)
   .post(validate(bookingValidation.create), create);
 
-// router
-//   .route('/:providerId')
-//   .get(validate(bookingValidation.get), get);
+router
+  .route('/:bookingId')
+  .get(validate(bookingValidation.get), get);
 
 export default router;

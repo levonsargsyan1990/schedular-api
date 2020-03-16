@@ -19,9 +19,9 @@ export default {
   },
 
   // GET /bookings/:bookingId
-  // get: {
-  //   params: Joi.object({
-  //     providerId: Joi.string().regex(mongoIdRegex).required(),
-  //   }),
-  // },
+  get: {
+    params: Joi.object({
+      bookingId: Joi.string().regex(mongoIdRegex).required(),
+    }),
+  },
 };
