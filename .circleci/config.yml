@@ -38,12 +38,12 @@ jobs:
                       ssh $SSH_USER@$SSH_HOST "docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY};
                           docker stop $NAME || true && docker rm $NAME || true;
                           docker pull $IMAGE:$CIRCLE_SHA1;
-                          docker run -d -p ${PORT}:${PORT}
-                              -e NODE_ENV='${NODE_ENV}'
-                              -e JWT_SECRET='${JWT_SECRET}'
-                              -e SENTRY_DSN='${SENTRY_DSN}'
-                              -e PORT='${PORT}'
-                              -e MONGO_URL='${MONGO_URL}'
+                          docker run -d -p ${PORT}:${PORT} \
+                              -e NODE_ENV='${NODE_ENV}' \
+                              -e JWT_SECRET='${JWT_SECRET}' \
+                              -e SENTRY_DSN='${SENTRY_DSN}' \
+                              -e PORT='${PORT}' \
+                              -e MONGO_URL='${MONGO_URL}' \
                               --name ${NAME} ${IMAGE}:${CIRCLE_SHA1}"
 workflows:
     version: 2.1
