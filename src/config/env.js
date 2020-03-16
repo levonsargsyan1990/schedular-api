@@ -12,6 +12,7 @@ const {
   JWT_SECRET,
   MONGO_URL,
   JWT_EXPIRATION_MINUTES,
+  SENTRY_DSN,
 } = process.env;
 
 const variables = {
@@ -23,6 +24,9 @@ const variables = {
   },
   mongo: {
     url: MONGO_URL,
+  },
+  sentry: {
+    dsn: SENTRY_DSN,
   },
 };
 

@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import passport from 'passport';
 import helmet from 'helmet';
 import cors from 'cors';
+import * as Sentry from '@sentry/node';
 
 import env from './config/env';
 import { init as initDatabase } from './lib/mongo';
@@ -12,11 +13,15 @@ import { login } from './controllers/auth';
 import router from './routes';
 import { converter, notFound, handler } from './middlewares/error';
 
+Sentry.init({ dsn: 'https://d01a07e14c4542fcaef02c872e1a81b8@sentry.io/4894158' });
 
 initDatabase();
 initPassport();
 
 const app = express();
+
+// The request handler must be the first middleware on the app
+app.use(Sentry.Handlers.requestHandler());
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -38,6 +43,9 @@ app.get('/health', checkHealth);
 app.post('/login', login);
 
 app.use(passport.authenticate('jwt', { session: false }), router);
+
+// The error handler must be before any other error middleware and after all controllers
+app.use(Sentry.Handlers.errorHandler());
 
 // if error is not an instanceOf APIError, convert it.
 app.use(converter);
