@@ -1,6 +1,6 @@
 import httpStatus from 'http-status';
 import expressValidation from 'express-validation';
-import APIError from '../utils/APIError';
+import { APIError } from '../utils';
 import variables from '../config/env';
 
 /**
@@ -9,7 +9,7 @@ import variables from '../config/env';
  */
 export const handler = (err, req, res, next) => {
   const response = {
-    code: err.status,
+    status: err.status,
     message: err.message || httpStatus[err.status],
     errors: err.errors,
     stack: err.stack,

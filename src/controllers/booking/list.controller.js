@@ -2,7 +2,7 @@ import Organization from '../../models/organization.model';
 import { Success } from '../../utils';
 
 /**
- * Finds all services of the organization
+ * Finds all providers of the organization
  *
  * @param {Object} req - Request object
  * @param {Object} req.user - Authenticated organization
@@ -13,8 +13,8 @@ export const list = async (req, res, next) => {
   try {
     const { user: { _id: organizationId } } = req;
     const organization = await Organization.findOne({ _id: organizationId }).exec();
-    const services = await organization.servicesAsync();
-    return new Success({ data: services, res }).send();
+    const bookings = await organization.bookingsAsync();
+    return new Success({ data: bookings, res }).send();
   } catch (err) {
     next(err);
   }
