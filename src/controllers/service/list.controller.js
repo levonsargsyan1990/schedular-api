@@ -1,5 +1,5 @@
 import Service from '../../models/service.model';
-
+import { Success } from '../../utils';
 
 /**
  * Finds all services of the organization
@@ -10,7 +10,11 @@ import Service from '../../models/service.model';
  * @param {Object} res - Response object
  */
 export const list = async (req, res, next) => {
-  const { user: organization } = req;
-  const services = await Service.find({ organizationId: organization._id }).exec();
-  res.send(services);
+  try {
+    const { user: organization } = req;
+    const services = await Service.find({ organizationId: organization._id }).exec();
+    return new Success({ data: services, res }).send();
+  } catch (err) {
+    next(err);
+  }
 };
