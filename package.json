@@ -24,6 +24,7 @@
   "homepage": "https://github.com/levonsargsyan1990/schedule-api#readme",
   "dependencies": {
     "@hapi/joi": "^17.1.1",
+    "@sentry/node": "^5.14.2",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv-safe": "^8.2.0",
