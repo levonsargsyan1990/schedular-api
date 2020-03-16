@@ -24,4 +24,11 @@ export default {
       serviceId: Joi.string().regex(mongoIdRegex).required(),
     }),
   },
+
+  // GET /services/:serviceId/options
+  getOptions: {
+    params: Joi.object({
+      serviceId: Joi.string().regex(mongoIdRegex).required(),
+    }),
+  },
 };

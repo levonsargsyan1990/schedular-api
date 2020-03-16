@@ -1,7 +1,7 @@
 import express from 'express';
 import { validate } from 'express-validation';
 import {
-  list, get, create, getProviders,
+  list, get, create, getProviders, getOptions,
 } from '../controllers/service';
 import serviceValidation from '../validation/service.validation';
 
@@ -19,5 +19,9 @@ router
 router
   .route('/:serviceId/providers')
   .get(validate(serviceValidation.getProviders), getProviders);
+
+router
+  .route('/:serviceId/options')
+  .get(validate(serviceValidation.getOptions), getOptions);
 
 export default router;

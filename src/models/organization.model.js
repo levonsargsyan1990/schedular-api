@@ -24,12 +24,27 @@ const schema = new mongoose.Schema({
 
 
 schema.method({
+  /**
+   * Finds all bookings of organization
+   *
+   * @returns
+   */
   bookingsAsync() {
     return Booking.find({ organizationId: this._id }).exec();
   },
+  /**
+   * Finds all services of organization
+   *
+   * @returns
+   */
   servicesAsync() {
     return Service.find({ organizationId: this._id }).exec();
   },
+  /**
+   * Finds all providers of organization
+   *
+   * @returns
+   */
   providersAsync() {
     return Provider.find({ organizationId: this._id }).exec();
   },
