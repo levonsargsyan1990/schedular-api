@@ -1,6 +1,5 @@
-import httpStatus from 'http-status';
 import Service from '../../models/service.model';
-import { Success, APIError } from '../../utils';
+import { Success } from '../../utils';
 
 /**
  * Creates new service
@@ -18,12 +17,6 @@ export const create = async (req, res, next) => {
     const { user: organization, body } = req;
     const service = new Service({ ...body, organizationId: organization._id });
     await service.save();
-    if (!service) {
-      throw new APIError({
-        status: httpStatus.BAD_REQUEST,
-        message: 'No service found with that ID',
-      });
-    }
     return new Success({ data: service, res }).send();
   } catch (err) {
     next(err);
