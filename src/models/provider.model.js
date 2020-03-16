@@ -19,10 +19,6 @@ const schema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
 }, { timestamps: true });
 
 const Provider = mongoose.model('Provider', schema);
