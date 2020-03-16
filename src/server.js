@@ -13,7 +13,7 @@ import { login } from './controllers/auth';
 import router from './routes';
 import { converter, notFound, handler } from './middlewares/error';
 
-Sentry.init({ dsn: 'https://d01a07e14c4542fcaef02c872e1a81b8@sentry.io/4894158' });
+Sentry.init({ dsn: env.sentry.dsn });
 
 initDatabase();
 initPassport();
