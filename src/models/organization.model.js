@@ -19,7 +19,7 @@ const daySchema = new mongoose.Schema({
   },
 });
 
-export const workingHoursSchema = new mongoose.Schema({
+const workingHoursSchema = new mongoose.Schema({
   monday: {
     type: daySchema,
     default: {},
@@ -38,6 +38,7 @@ export const workingHoursSchema = new mongoose.Schema({
   },
   friday: {
     type: daySchema,
+    default: {},
   },
   saturday: {
     type: daySchema,
