@@ -34,6 +34,11 @@ const schema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  status: {
+    type: String,
+    default: 'created',
+    enum: ['created', 'canceled', 'completed', 'in-progress'],
+  },
   end: {
     type: Date,
     required: true,
