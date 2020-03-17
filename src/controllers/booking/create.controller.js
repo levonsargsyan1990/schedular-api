@@ -14,8 +14,8 @@ import { Success, APIError } from '../../utils';
  * @param {Object} req.body - Body of request
  * @param {String} req.body.serviceId - ID of service
  * @param {String} req.body.providerId - ID of provider
- * @param {Date} req.body.startsAt - Start date
- * @param {Date} req.body.endsAt - End date
+ * @param {Date} req.body.start - Start date
+ * @param {Date} req.body.end - End date
  * @param {Object} req.body.location - Location of booking
  * @param {String} req.body.location.address - Text address of booking
  * @param {Number} req.body.location.long - Longitude location of booking

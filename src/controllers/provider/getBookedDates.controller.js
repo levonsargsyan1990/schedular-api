@@ -27,7 +27,8 @@ export const getBookedDates = async (req, res, next) => {
         message: 'No provider found with that ID',
       });
     }
-    return new Success({ data: provider, res }).send();
+    const bookedDates = await provider.getBookedDates();
+    return new Success({ data: bookedDates, res }).send();
   } catch (err) {
     next(err);
   }

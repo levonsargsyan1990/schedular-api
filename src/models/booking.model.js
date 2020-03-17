@@ -30,11 +30,11 @@ const schema = new mongoose.Schema({
     type: ObjectId,
     required: true,
   },
-  startsAt: {
+  start: {
     type: Date,
     required: true,
   },
-  endsAt: {
+  end: {
     type: Date,
     required: true,
   },

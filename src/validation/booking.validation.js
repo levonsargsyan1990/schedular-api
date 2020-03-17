@@ -8,8 +8,8 @@ export default {
       name: Joi.string().required(),
       serviceId: Joi.string().regex(mongoIdRegex).required(),
       providerId: Joi.string().regex(mongoIdRegex).required(),
-      startsAt: Joi.date().required(),
-      endsAt: Joi.date().required(),
+      start: Joi.date().required(),
+      end: Joi.date().required(),
       location: Joi.object({
         address: Joi.string(),
         long: Joi.number().positive().required(),

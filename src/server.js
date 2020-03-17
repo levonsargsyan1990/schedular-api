@@ -5,7 +5,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import * as Sentry from '@sentry/node';
 
-import env from './config/env';
+import variables from './config/env';
 import { init as initDatabase } from './lib/mongo';
 import { init as initPassport } from './lib/passport';
 import { checkHealth } from './controllers/health';
@@ -13,7 +13,9 @@ import { login } from './controllers/auth';
 import router from './routes';
 import { converter, notFound, handler } from './middlewares/error';
 
-Sentry.init({ dsn: env.sentry.dsn });
+if (variables.environment !== 'development') {
+  Sentry.init({ dsn: variables.sentry.dsn });
+}
 
 initDatabase();
 initPassport();
@@ -56,4 +58,4 @@ app.use(notFound);
 // error handler, send stacktrace only during development
 app.use(handler);
 
-app.listen(env.port, () => console.log(`Server running on port ${env.port}`));
+app.listen(variables.port, () => console.log(`Server running on port ${variables.port}`));

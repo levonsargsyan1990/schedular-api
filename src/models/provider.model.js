@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import Booking from './booking.model';
 
 const { ObjectId } = mongoose.Schema.Types;
 
@@ -74,6 +75,14 @@ const schema = new mongoose.Schema({
     default: {},
   },
 }, { timestamps: true });
+
+schema.method({
+  async getBookedDates() {
+    const bookings = await Booking.find({ providerId: this._id, end: { $gte: new Date() } }).exec();
+    const bookedDates = bookings.map(({ start, end }) => ({ start, end }));
+    return bookedDates;
+  },
+});
 
 const Provider = mongoose.model('Provider', schema);
 
