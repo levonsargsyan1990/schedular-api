@@ -2,6 +2,52 @@ import mongoose from 'mongoose';
 import Booking from './booking.model';
 import Service from './service.model';
 import Provider from './provider.model';
+import { APICredentials } from '../utils';
+
+const daySchema = new mongoose.Schema({
+  working: {
+    type: Boolean,
+    default: true,
+  },
+  start: {
+    type: String,
+    default: '8:00',
+  },
+  end: {
+    type: String,
+    default: '18:00',
+  },
+});
+
+export const workingHoursSchema = new mongoose.Schema({
+  monday: {
+    type: daySchema,
+    default: {},
+  },
+  tuesday: {
+    type: daySchema,
+    default: {},
+  },
+  wednesday: {
+    type: daySchema,
+    default: {},
+  },
+  thursday: {
+    type: daySchema,
+    default: {},
+  },
+  friday: {
+    type: daySchema,
+  },
+  saturday: {
+    type: daySchema,
+    default: {},
+  },
+  sunday: {
+    type: daySchema,
+    default: {},
+  },
+});
 
 const schema = new mongoose.Schema({
   name: {
@@ -11,17 +57,22 @@ const schema = new mongoose.Schema({
   apiKey: {
     type: String,
     required: true,
+    default: APICredentials.generateApiKey,
   },
   apiSecret: {
     type: String,
     required: true,
+    default: APICredentials.generateApiSecret,
   },
   active: {
     type: Boolean,
     default: true,
   },
+  workingHours: {
+    type: workingHoursSchema,
+    default: {},
+  },
 }, { timestamps: true });
-
 
 schema.method({
   /**
