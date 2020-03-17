@@ -54,4 +54,15 @@ export default {
       providerId: Joi.string().regex(mongoIdRegex).required(),
     }),
   },
+
+  // GET /providers/:providerId/booked
+  getBookedDates: {
+    params: Joi.object({
+      providerId: Joi.string().regex(mongoIdRegex).required(),
+    }),
+    query: Joi.object({
+      start: Joi.date().timestamp(),
+      end: Joi.date().timestamp(),
+    }),
+  },
 };
