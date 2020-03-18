@@ -25,4 +25,24 @@ export default {
       bookingId: Joi.string().regex(mongoIdRegex).required(),
     }),
   },
+
+  // PATCH /bookings/:bookingId
+  update: {
+    params: Joi.object({
+      bookingId: Joi.string().regex(mongoIdRegex).required(),
+    }),
+    body: Joi.object({
+      name: Joi.string(),
+      serviceId: Joi.string().regex(mongoIdRegex),
+      providerId: Joi.string().regex(mongoIdRegex),
+      start: Joi.date(),
+      status: Joi.string(),
+      end: Joi.date(),
+      location: Joi.object({
+        address: Joi.string(),
+        long: Joi.number().positive(),
+        lat: Joi.number().positive(),
+      }),
+    }),
+  },
 };
