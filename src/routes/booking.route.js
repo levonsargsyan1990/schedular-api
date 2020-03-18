@@ -1,6 +1,9 @@
 import express from 'express';
 import { validate } from 'express-validation';
-import { list, get, create, patch } from '../controllers/booking';
+import {
+  list, get, create, update,
+} from '../controllers/booking';
+import { bookingExists } from '../middlewares/booking.middleware';
 import bookingValidation from '../validation/booking.validation';
 
 const router = express.Router();
@@ -12,6 +15,7 @@ router
 
 router
   .route('/:bookingId')
+  .all(bookingExists)
   .get(validate(bookingValidation.get), get)
   .patch(validate(bookingValidation.update), update);
 

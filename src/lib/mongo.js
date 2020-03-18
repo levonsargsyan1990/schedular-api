@@ -2,5 +2,5 @@ import mongoose from 'mongoose';
 import env from '../config/env';
 
 export const init = () => {
-  mongoose.connect(env.mongo.url);
+  mongoose.connect(env.mongo.url, { useUnifiedTopology: true, useNewUrlParser: true });
 };

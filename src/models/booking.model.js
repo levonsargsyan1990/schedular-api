@@ -26,6 +26,10 @@ const schema = new mongoose.Schema({
     type: ObjectId,
     required: true,
   },
+  optionId: {
+    type: ObjectId,
+    required: true,
+  },
   providerId: {
     type: ObjectId,
     required: true,

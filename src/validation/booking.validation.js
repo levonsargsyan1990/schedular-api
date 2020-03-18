@@ -5,8 +5,8 @@ export default {
   // POST /bookings
   create: {
     body: Joi.object({
-      name: Joi.string().required(),
       serviceId: Joi.string().regex(mongoIdRegex).required(),
+      optionId: Joi.string().regex(mongoIdRegex).required(),
       providerId: Joi.string().regex(mongoIdRegex).required(),
       start: Joi.date().required(),
       status: Joi.string(),
@@ -32,8 +32,8 @@ export default {
       bookingId: Joi.string().regex(mongoIdRegex).required(),
     }),
     body: Joi.object({
-      name: Joi.string(),
       serviceId: Joi.string().regex(mongoIdRegex),
+      optionId: Joi.string().regex(mongoIdRegex),
       providerId: Joi.string().regex(mongoIdRegex),
       start: Joi.date(),
       status: Joi.string(),
