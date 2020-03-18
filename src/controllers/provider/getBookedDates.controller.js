@@ -6,10 +6,11 @@ import { Success } from '../../utils';
  * @param {Object} req - Request object
  * @param {Object} res - Response object
  */
-export const get = (req, res, next) => {
+export const getBookedDates = async (req, res, next) => {
   try {
     const { provider } = req;
-    return new Success({ data: provider, res }).send();
+    const bookedDates = await provider.bookedDates();
+    return new Success({ data: bookedDates, res }).send();
   } catch (err) {
     next(err);
   }

@@ -5,11 +5,12 @@ export default {
   // POST /bookings
   create: {
     body: Joi.object({
-      name: Joi.string().required(),
       serviceId: Joi.string().regex(mongoIdRegex).required(),
+      optionId: Joi.string().regex(mongoIdRegex).required(),
       providerId: Joi.string().regex(mongoIdRegex).required(),
-      startsAt: Joi.date().required(),
-      endsAt: Joi.date().required(),
+      start: Joi.date().required(),
+      status: Joi.string(),
+      end: Joi.date().required(),
       location: Joi.object({
         address: Joi.string(),
         long: Joi.number().positive().required(),
@@ -22,6 +23,26 @@ export default {
   get: {
     params: Joi.object({
       bookingId: Joi.string().regex(mongoIdRegex).required(),
+    }),
+  },
+
+  // PATCH /bookings/:bookingId
+  update: {
+    params: Joi.object({
+      bookingId: Joi.string().regex(mongoIdRegex).required(),
+    }),
+    body: Joi.object({
+      serviceId: Joi.string().regex(mongoIdRegex),
+      optionId: Joi.string().regex(mongoIdRegex),
+      providerId: Joi.string().regex(mongoIdRegex),
+      start: Joi.date(),
+      status: Joi.string(),
+      end: Joi.date(),
+      location: Joi.object({
+        address: Joi.string(),
+        long: Joi.number().positive(),
+        lat: Joi.number().positive(),
+      }),
     }),
   },
 };

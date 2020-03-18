@@ -8,6 +8,43 @@ export default {
       name: Joi.string().required(),
       services: Joi.array().items(Joi.string().regex(mongoIdRegex)),
       active: Joi.bool(),
+      workingHours: Joi.object({
+        monday: Joi.object({
+          working: Joi.bool().required(),
+          start: Joi.when('working', { is: true, then: Joi.string().required() }),
+          end: Joi.when('working', { is: true, then: Joi.string().required() }),
+        }),
+        tuesday: Joi.object({
+          working: Joi.bool().required(),
+          start: Joi.when('working', { is: true, then: Joi.string().required() }),
+          end: Joi.when('working', { is: true, then: Joi.string().required() }),
+        }),
+        wednesday: Joi.object({
+          working: Joi.bool().required(),
+          start: Joi.when('working', { is: true, then: Joi.string().required() }),
+          end: Joi.when('working', { is: true, then: Joi.string().required() }),
+        }),
+        thursday: Joi.object({
+          working: Joi.bool().required(),
+          start: Joi.when('working', { is: true, then: Joi.string().required() }),
+          end: Joi.when('working', { is: true, then: Joi.string().required() }),
+        }),
+        friday: {
+          working: Joi.bool().required(),
+          start: Joi.when('working', { is: true, then: Joi.string().required() }),
+          end: Joi.when('working', { is: true, then: Joi.string().required() }),
+        },
+        saturday: Joi.object({
+          working: Joi.bool().required(),
+          start: Joi.when('working', { is: true, then: Joi.string().required() }),
+          end: Joi.when('working', { is: true, then: Joi.string().required() }),
+        }),
+        sunday: Joi.object({
+          working: Joi.bool().required(),
+          start: Joi.when('working', { is: true, then: Joi.string().required() }),
+          end: Joi.when('working', { is: true, then: Joi.string().required() }),
+        }),
+      }),
     }),
   },
 
@@ -15,6 +52,17 @@ export default {
   get: {
     params: Joi.object({
       providerId: Joi.string().regex(mongoIdRegex).required(),
+    }),
+  },
+
+  // GET /providers/:providerId/booked
+  getBookedDates: {
+    params: Joi.object({
+      providerId: Joi.string().regex(mongoIdRegex).required(),
+    }),
+    query: Joi.object({
+      start: Joi.date().timestamp(),
+      end: Joi.date().timestamp(),
     }),
   },
 };

@@ -26,15 +26,24 @@ const schema = new mongoose.Schema({
     type: ObjectId,
     required: true,
   },
+  optionId: {
+    type: ObjectId,
+    required: true,
+  },
   providerId: {
     type: ObjectId,
     required: true,
   },
-  startsAt: {
+  start: {
     type: Date,
     required: true,
   },
-  endsAt: {
+  status: {
+    type: String,
+    default: 'created',
+    enum: ['created', 'canceled', 'completed', 'in-progress'],
+  },
+  end: {
     type: Date,
     required: true,
   },

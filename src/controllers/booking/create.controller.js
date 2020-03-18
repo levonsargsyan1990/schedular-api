@@ -2,6 +2,7 @@ import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import Booking from '../../models/booking.model';
 import Service from '../../models/service.model';
+import Option from '../../models/option.model';
 import Provider from '../../models/provider.model';
 import { Success, APIError } from '../../utils';
 
@@ -13,9 +14,10 @@ import { Success, APIError } from '../../utils';
  * @param {Object} req.user._id - ID of organization
  * @param {Object} req.body - Body of request
  * @param {String} req.body.serviceId - ID of service
+ * @param {String} req.body.optionId - ID of service option
  * @param {String} req.body.providerId - ID of provider
- * @param {Date} req.body.startsAt - Start date
- * @param {Date} req.body.endsAt - End date
+ * @param {Date} req.body.start - Start date
+ * @param {Date} req.body.end - End date
  * @param {Object} req.body.location - Location of booking
  * @param {String} req.body.location.address - Text address of booking
  * @param {Number} req.body.location.long - Longitude location of booking
@@ -26,6 +28,7 @@ export const create = async (req, res, next) => {
     const {
       user: organization, body, body: {
         serviceId: serviceStringId,
+        optionId: optionStringId,
         providerId: providerStringId,
       },
     } = req;
@@ -38,6 +41,18 @@ export const create = async (req, res, next) => {
       throw new APIError({
         status: httpStatus.BAD_REQUEST,
         message: `No service found with ID ${serviceStringId} in ${organization.name} organization`,
+      });
+    }
+    const optionId = new mongoose.Types.ObjectId(optionStringId);
+    const option = await Option.findOne({
+      _id: optionId,
+      serviceId: service._id,
+      organizationId: organization._id,
+    }).exec();
+    if (!option) {
+      throw new APIError({
+        status: httpStatus.BAD_REQUEST,
+        message: `No option found with ID ${optionStringId} in ${organization.name} organization`,
       });
     }
     const providerId = new mongoose.Types.ObjectId(providerStringId);
