@@ -6,7 +6,7 @@ import httpStatus from 'http-status';
 export class Success {
   /**
    * Creates an API error.
-   * @param {number} status - HTTP status code of error.
+   * @param {Number} status - HTTP status code of error.
    * @param {*} data - Payload that will be returned in HTTP response.
    * @param {Object} res - HTTP response object.
    */

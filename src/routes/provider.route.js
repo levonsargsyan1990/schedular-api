@@ -10,7 +10,7 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(list)
+  .get(validate(providerValidation.list), list)
   .post(validate(providerValidation.create), create);
 
 router

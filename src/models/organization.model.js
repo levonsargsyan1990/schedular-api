@@ -87,7 +87,9 @@ schema.method({
   /**
    * Finds all services of organization
    *
-   * @returns
+   * @param {Object} options - Query options
+   * @param {[Boolean]} options.active - Look for active / inactive services if set
+   * @returns {Object[]}
    */
   servicesAsync({ active }) {
     const query = { organizationId: this._id };
@@ -99,10 +101,16 @@ schema.method({
   /**
    * Finds all providers of organization
    *
-   * @returns
+   * @param {Object} options - Query options
+   * @param {[Boolean]} options.active - Look for active / inactive provider if set
+   * @returns {Object[]}
    */
-  providersAsync() {
-    return Provider.find({ organizationId: this._id }).exec();
+  providersAsync({ active }) {
+    const query = { organizationId: this._id };
+    if (active !== undefined) {
+      query.active = active;
+    }
+    return Provider.find(query).exec();
   },
 });
 

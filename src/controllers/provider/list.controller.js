@@ -10,8 +10,8 @@ import { Success } from '../../utils';
  */
 export const list = async (req, res, next) => {
   try {
-    const { user: organization } = req;
-    const providers = await organization.providersAsync();
+    const { user: organization, query: { active } } = req;
+    const providers = await organization.providersAsync({ active });
     return new Success({ data: providers, res }).send();
   } catch (err) {
     next(err);
