@@ -2,6 +2,13 @@ import Joi from '@hapi/joi';
 import { mongoIdRegex } from '../constants/regex';
 
 export default {
+  // GET /services
+  list: {
+    query: Joi.object({
+      active: Joi.bool(),
+    }),
+  },
+
   // POST /services
   create: {
     body: Joi.object({

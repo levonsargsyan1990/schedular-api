@@ -89,8 +89,12 @@ schema.method({
    *
    * @returns
    */
-  servicesAsync() {
-    return Service.find({ organizationId: this._id }).exec();
+  servicesAsync({ active }) {
+    const query = { organizationId: this._id };
+    if (active !== undefined) {
+      query.active = active;
+    }
+    return Service.find(query).exec();
   },
   /**
    * Finds all providers of organization
