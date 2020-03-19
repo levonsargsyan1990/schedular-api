@@ -30,8 +30,12 @@ export const create = async (req, res, next) => {
         serviceId: serviceStringId,
         optionId: optionStringId,
         providerId: providerStringId,
+        start,
+        end,
       },
     } = req;
+
+    // Check if service exists for organization
     const serviceId = new mongoose.Types.ObjectId(serviceStringId);
     const service = await Service.findOne({
       _id: serviceId,
@@ -43,6 +47,8 @@ export const create = async (req, res, next) => {
         message: `No service found with ID ${serviceStringId} in ${organization.name} organization`,
       });
     }
+
+    // Check if service option exists for organization
     const optionId = new mongoose.Types.ObjectId(optionStringId);
     const option = await Option.findOne({
       _id: optionId,
@@ -55,6 +61,8 @@ export const create = async (req, res, next) => {
         message: `No option found with ID ${optionStringId} in ${organization.name} organization`,
       });
     }
+
+    // Check if provider exists for organization and providers that service
     const providerId = new mongoose.Types.ObjectId(providerStringId);
     const provider = await Provider.findOne({
       _id: providerId,
@@ -67,6 +75,19 @@ export const create = async (req, res, next) => {
         message: `No provider found with ID ${providerStringId} for ${service.name} service`,
       });
     }
+
+    // Check if provider is available for specified dates
+    const isProviderAvailable = await provider.isAvailable({
+      start: new Date(start),
+      end: new Date(end),
+    });
+    if (!isProviderAvailable) {
+      throw new APIError({
+        status: httpStatus.BAD_REQUEST,
+        message: `Provider with ID ${provider._id.toString()} is not available for dates ${start} to ${end}`,
+      });
+    }
+
     const booking = new Booking({ ...body, organizationId: organization._id });
     await booking.save();
     return new Success({ data: booking, res }).send();

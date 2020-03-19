@@ -4,7 +4,6 @@ import Service from '../../models/service.model';
 import Option from '../../models/option.model';
 import Provider from '../../models/provider.model';
 import { Success, APIError } from '../../utils';
-import Booking from '../../models/booking.model';
 
 /**
  * Update booking

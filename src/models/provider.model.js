@@ -110,11 +110,13 @@ schema.method({
     const { excludedBookings = [] } = options;
     const weekDay = moment(dateRange.start).format('dddd').toLowerCase();
     const { working: isWorkDay, ...workingDayTimeRange } = this.workingHours[weekDay];
+
     // Checking if provider works that day
     if (!isWorkDay) {
       console.log(`Provider ${this._id} is not working on ${weekDay}`);
       return false;
     }
+
     // Checking if provider works during those hours
     const timeRange = {
       start: moment(dateRange.start).format('H:mm'),
