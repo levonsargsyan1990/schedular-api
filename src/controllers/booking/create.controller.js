@@ -88,7 +88,14 @@ export const create = async (req, res, next) => {
       });
     }
 
-    const booking = new Booking({ ...body, organizationId: organization._id });
+    const booking = new Booking({
+      ...body,
+      name: service.name,
+      duration: option.duration,
+      price: option.price,
+      currency: option.currency,
+      organizationId: organization._id,
+    });
     await booking.save();
     return new Success({ data: booking, res }).send();
   } catch (err) {

@@ -50,6 +50,22 @@ const schema = new mongoose.Schema({
   location: {
     type: locationSchema,
   },
+  name: {
+    type: String,
+    required: true,
+  },
+  duration: {
+    type: String,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+  currency: {
+    type: String,
+    required: true,
+  },
 }, { timestamps: true });
 
 const Booking = mongoose.model('Booking', schema);

@@ -57,6 +57,7 @@ export const update = async (req, res, next) => {
         });
       }
       booking.serviceId = serviceId;
+      booking.name = service.name;
     }
 
     // Check if option has been changed
@@ -75,6 +76,9 @@ export const update = async (req, res, next) => {
         });
       }
       booking.optionId = optionId;
+      booking.price = option.price;
+      booking.currency = option.currency;
+      booking.duration = option.duration;
     }
 
     // Check if date has been changed
