@@ -1,7 +1,7 @@
 import express from 'express';
 import { validate } from 'express-validation';
 import {
-  list, get, create, getProviders, getOptions,
+  list, get, create, getProviders, getOptions, update,
 } from '../controllers/service';
 import { serviceExists } from '../middlewares/service.middleware';
 import serviceValidation from '../validation/service.validation';
@@ -16,7 +16,8 @@ router
 router
   .route('/:serviceId')
   .all(serviceExists)
-  .get(validate(serviceValidation.get), get);
+  .get(validate(serviceValidation.get), get)
+  .patch(validate(serviceValidation.update), update);
 
 router
   .route('/:serviceId/providers')

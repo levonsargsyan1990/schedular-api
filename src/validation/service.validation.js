@@ -25,6 +25,18 @@ export default {
     }),
   },
 
+  // PATCH /services/:serviceId
+  update: {
+    params: Joi.object({
+      serviceId: Joi.string().regex(mongoIdRegex).required(),
+    }),
+    body: Joi.object({
+      name: Joi.string().required(),
+      description: Joi.string(),
+      active: Joi.bool(),
+    }),
+  },
+
   // GET /services/:serviceId/providers
   getProviders: {
     params: Joi.object({
