@@ -62,6 +62,55 @@ export default {
     }),
   },
 
+  // PATCH /providers/:providerId
+  update: {
+    params: Joi.object({
+      providerId: Joi.string().regex(mongoIdRegex).required(),
+    }),
+    body: Joi.object({
+      name: Joi.string(),
+      services: Joi.array().items(Joi.string().regex(mongoIdRegex)),
+      active: Joi.bool(),
+      workingHours: Joi.object({
+        monday: Joi.object({
+          working: Joi.bool(),
+          start: Joi.string(),
+          end: Joi.string(),
+        }),
+        tuesday: Joi.object({
+          working: Joi.bool().required(),
+          start: Joi.string(),
+          end: Joi.string(),
+        }),
+        wednesday: Joi.object({
+          working: Joi.bool().required(),
+          start: Joi.string(),
+          end: Joi.string(),
+        }),
+        thursday: Joi.object({
+          working: Joi.bool().required(),
+          start: Joi.string(),
+          end: Joi.string(),
+        }),
+        friday: {
+          working: Joi.bool().required(),
+          start: Joi.string(),
+          end: Joi.string(),
+        },
+        saturday: Joi.object({
+          working: Joi.bool().required(),
+          start: Joi.string(),
+          end: Joi.string(),
+        }),
+        sunday: Joi.object({
+          working: Joi.bool().required(),
+          start: Joi.string(),
+          end: Joi.string(),
+        }),
+      }),
+    }),
+  },
+
   // GET /providers/:providerId/booked
   getBookedDates: {
     params: Joi.object({

@@ -48,6 +48,7 @@ export const update = async (req, res, next) => {
       const serviceId = new mongoose.Types.ObjectId(serviceStringId);
       const service = await Service.findOne({
         _id: serviceId,
+        active: true,
         organizationId: organization._id,
       });
       if (!service) {
@@ -66,6 +67,7 @@ export const update = async (req, res, next) => {
       const optionId = new mongoose.Types.ObjectId(optionStringId);
       const option = await Option.findOne({
         _id: optionId,
+        active: true,
         serviceId: booking.serviceId,
         organizationId: organization._id,
       });
@@ -104,6 +106,7 @@ export const update = async (req, res, next) => {
       console.log('Provider / Date has been changed');
       const provider = await Provider.findOne({
         _id: booking.providerId,
+        active: true,
         services: booking.serviceId,
         organizationId: organization._id,
       }).exec();

@@ -31,7 +31,7 @@ export default {
       serviceId: Joi.string().regex(mongoIdRegex).required(),
     }),
     body: Joi.object({
-      name: Joi.string().required(),
+      name: Joi.string(),
       description: Joi.string(),
       active: Joi.bool(),
     }),

@@ -39,6 +39,7 @@ export const create = async (req, res, next) => {
     const serviceId = new mongoose.Types.ObjectId(serviceStringId);
     const service = await Service.findOne({
       _id: serviceId,
+      active: true,
       organizationId: organization._id,
     }).exec();
     if (!service) {
@@ -52,6 +53,7 @@ export const create = async (req, res, next) => {
     const optionId = new mongoose.Types.ObjectId(optionStringId);
     const option = await Option.findOne({
       _id: optionId,
+      active: true,
       serviceId: service._id,
       organizationId: organization._id,
     }).exec();
@@ -66,6 +68,7 @@ export const create = async (req, res, next) => {
     const providerId = new mongoose.Types.ObjectId(providerStringId);
     const provider = await Provider.findOne({
       _id: providerId,
+      active: true,
       services: serviceId,
       organizationId: organization._id,
     }).exec();
