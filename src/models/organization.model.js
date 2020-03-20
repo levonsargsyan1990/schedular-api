@@ -4,7 +4,7 @@ import Service from './service.model';
 import Provider from './provider.model';
 import { APICredentials } from '../utils';
 
-const daySchema = new mongoose.Schema({
+const daySchema = {
   working: {
     type: Boolean,
     default: true,
@@ -17,9 +17,9 @@ const daySchema = new mongoose.Schema({
     type: String,
     default: '18:00',
   },
-});
+};
 
-const workingHoursSchema = new mongoose.Schema({
+const workingHoursSchema = {
   monday: {
     type: daySchema,
     default: {},
@@ -48,7 +48,7 @@ const workingHoursSchema = new mongoose.Schema({
     type: daySchema,
     default: {},
   },
-});
+};
 
 const schema = new mongoose.Schema({
   name: {
@@ -67,10 +67,12 @@ const schema = new mongoose.Schema({
   },
   active: {
     type: Boolean,
+    required: true,
     default: true,
   },
   workingHours: {
     type: workingHoursSchema,
+    required: true,
     default: {},
   },
 }, { timestamps: true });
