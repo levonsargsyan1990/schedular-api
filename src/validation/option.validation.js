@@ -7,7 +7,8 @@ export default {
     body: Joi.object({
       serviceId: Joi.string().regex(mongoIdRegex).required(),
       description: Joi.string(),
-      duration: Joi.string().required(),
+      duration: Joi.number().min(0).required(),
+      durationTimeUnit: Joi.string().valid('s', 'm', 'h').default('m'),
       active: Joi.bool(),
       price: Joi.number().positive().required(),
       currency: Joi.string(),

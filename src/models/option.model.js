@@ -16,8 +16,14 @@ const schema = new mongoose.Schema({
     default: '',
   },
   duration: {
-    type: String,
+    type: Number,
     required: true,
+    min: 0,
+  },
+  durationTimeUnit: {
+    type: String,
+    default: 'm',
+    enum: ['s', 'm', 'h'],
   },
   active: {
     type: Boolean,

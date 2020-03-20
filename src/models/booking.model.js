@@ -58,6 +58,11 @@ const schema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  durationTimeUnit: {
+    type: String,
+    required: true,
+    enum: ['s', 'm', 'h'],
+  },
   price: {
     type: Number,
     required: true,

@@ -8,9 +8,8 @@ export default {
       serviceId: Joi.string().regex(mongoIdRegex).required(),
       optionId: Joi.string().regex(mongoIdRegex).required(),
       providerId: Joi.string().regex(mongoIdRegex).required(),
-      start: Joi.date().required(),
       status: Joi.string(),
-      end: Joi.date().required(),
+      start: Joi.date().greater('now').required(),
       location: Joi.object({
         address: Joi.string(),
         long: Joi.number().positive().required(),
@@ -35,9 +34,8 @@ export default {
       serviceId: Joi.string().regex(mongoIdRegex),
       optionId: Joi.string().regex(mongoIdRegex),
       providerId: Joi.string().regex(mongoIdRegex),
-      start: Joi.date(),
+      start: Joi.date().greater('now'),
       status: Joi.string(),
-      end: Joi.date(),
       location: Joi.object({
         address: Joi.string(),
         long: Joi.number().positive(),

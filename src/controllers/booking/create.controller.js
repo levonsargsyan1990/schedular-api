@@ -1,4 +1,5 @@
 import httpStatus from 'http-status';
+import moment from 'moment';
 import mongoose from 'mongoose';
 import Booking from '../../models/booking.model';
 import Service from '../../models/service.model';
@@ -17,7 +18,6 @@ import { Success, APIError } from '../../utils';
  * @param {String} req.body.optionId - ID of service option
  * @param {String} req.body.providerId - ID of provider
  * @param {Date} req.body.start - Start date
- * @param {Date} req.body.end - End date
  * @param {Object} req.body.location - Location of booking
  * @param {String} req.body.location.address - Text address of booking
  * @param {Number} req.body.location.long - Longitude location of booking
@@ -31,7 +31,6 @@ export const create = async (req, res, next) => {
         optionId: optionStringId,
         providerId: providerStringId,
         start,
-        end,
       },
     } = req;
 
@@ -64,6 +63,14 @@ export const create = async (req, res, next) => {
       });
     }
 
+    const end = moment(start).add(option.duration, option.durationTimeUnit).utc().format();
+    if (!moment(start).isSame(end, 'day')) {
+      throw new APIError({
+        status: httpStatus.BAD_REQUEST,
+        message: 'Multi day bookings are not supported',
+      });
+    }
+
     // Check if provider exists for organization and providers that service
     const providerId = new mongoose.Types.ObjectId(providerStringId);
     const provider = await Provider.findOne({
@@ -93,8 +100,10 @@ export const create = async (req, res, next) => {
 
     const booking = new Booking({
       ...body,
+      end: new Date(end),
       name: service.name,
       duration: option.duration,
+      durationTimeUnit: option.durationTimeUnit,
       price: option.price,
       currency: option.currency,
       organizationId: organization._id,
