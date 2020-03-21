@@ -1,10 +1,10 @@
 import httpStatus from 'http-status';
+import moment from 'moment';
 import mongoose from 'mongoose';
 import Service from '../../models/service.model';
 import Option from '../../models/option.model';
 import Provider from '../../models/provider.model';
 import { Success, APIError } from '../../utils';
-import Booking from '../../models/booking.model';
 
 /**
  * Update booking
@@ -17,7 +17,6 @@ import Booking from '../../models/booking.model';
  * @param {String} req.body.serviceId - ID of service
  * @param {String} req.body.providerId - ID of provider
  * @param {Date} req.body.start - Start date
- * @param {Date} req.body.end - End date
  * @param {Object} req.body.location - Location of booking
  * @param {String} req.body.location.address - Text address of booking
  * @param {Number} req.body.location.long - Longitude location of booking
@@ -37,7 +36,6 @@ export const update = async (req, res, next) => {
       optionId: optionStringId,
       providerId: providerStringId,
       start,
-      end,
     } = body;
 
     // Updating location of the booking
@@ -49,6 +47,7 @@ export const update = async (req, res, next) => {
       const serviceId = new mongoose.Types.ObjectId(serviceStringId);
       const service = await Service.findOne({
         _id: serviceId,
+        active: true,
         organizationId: organization._id,
       });
       if (!service) {
@@ -58,6 +57,7 @@ export const update = async (req, res, next) => {
         });
       }
       booking.serviceId = serviceId;
+      booking.name = service.name;
     }
 
     // Check if option has been changed
@@ -66,6 +66,7 @@ export const update = async (req, res, next) => {
       const optionId = new mongoose.Types.ObjectId(optionStringId);
       const option = await Option.findOne({
         _id: optionId,
+        active: true,
         serviceId: booking.serviceId,
         organizationId: organization._id,
       });
@@ -75,7 +76,12 @@ export const update = async (req, res, next) => {
           message: `No option found with ID ${optionStringId} in ${organization.name} organization`,
         });
       }
+
       booking.optionId = optionId;
+      booking.price = option.price;
+      booking.currency = option.currency;
+      booking.duration = option.duration;
+      booking.durationTimeUnit = option.durationTimeUnit;
     }
 
     // Check if date has been changed
@@ -84,6 +90,19 @@ export const update = async (req, res, next) => {
       booking.start = new Date(start);
       dateHasChanged = true;
     }
+
+    const end = moment(booking.start)
+      .add(booking.duration, booking.durationTimeUnit)
+      .utc()
+      .format();
+
+    if (!moment(booking.start).isSame(end, 'day')) {
+      throw new APIError({
+        status: httpStatus.BAD_REQUEST,
+        message: 'Multi day bookings are not supported',
+      });
+    }
+
     if (end && new Date(end).getTime() !== booking.end.getTime()) {
       booking.end = new Date(end);
       dateHasChanged = true;
@@ -101,6 +120,7 @@ export const update = async (req, res, next) => {
       console.log('Provider / Date has been changed');
       const provider = await Provider.findOne({
         _id: booking.providerId,
+        active: true,
         services: booking.serviceId,
         organizationId: organization._id,
       }).exec();

@@ -13,6 +13,9 @@ const {
   MONGO_URL,
   JWT_EXPIRATION_MINUTES,
   SENTRY_DSN,
+  POSTMAN_API_KEY,
+  POSTMAN_LOCAL_ENV_ID,
+  POSTMAN_STAGING_ENV_ID,
 } = process.env;
 
 const variables = {
@@ -27,6 +30,11 @@ const variables = {
   },
   sentry: {
     dsn: SENTRY_DSN,
+  },
+  postman: {
+    apiKey: POSTMAN_API_KEY,
+    localEnvId: POSTMAN_LOCAL_ENV_ID,
+    stagingEnvId: POSTMAN_STAGING_ENV_ID,
   },
 };
 

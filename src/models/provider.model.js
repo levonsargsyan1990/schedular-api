@@ -5,7 +5,7 @@ import { datesOverlapArray, containsTimeRange } from '../utils/helpers';
 
 const { ObjectId } = mongoose.Schema.Types;
 
-const daySchema = {
+const daySchema = new mongoose.Schema({
   working: {
     type: Boolean,
     default: true,
@@ -22,38 +22,45 @@ const daySchema = {
       return this.working ? '18:00' : '';
     },
   },
-};
+}, { minimize: false });
 
-const workingHoursSchema = {
+const workingHoursSchema = new mongoose.Schema({
   monday: {
     type: daySchema,
     default: {},
+    required: true,
   },
   tuesday: {
     type: daySchema,
     default: {},
+    required: true,
   },
   wednesday: {
     type: daySchema,
     default: {},
+    required: true,
   },
   thursday: {
     type: daySchema,
     default: {},
+    required: true,
   },
   friday: {
     type: daySchema,
     default: {},
+    required: true,
   },
   saturday: {
     type: daySchema,
     default: {},
+    required: true,
   },
   sunday: {
     type: daySchema,
     default: {},
+    required: true,
   },
-};
+}, { minimize: false });
 
 const schema = new mongoose.Schema({
   organizationId: {
@@ -66,6 +73,7 @@ const schema = new mongoose.Schema({
   },
   services: {
     type: [mongoose.Schema.Types.ObjectId],
+    required: true,
     default: [],
   },
   active: {
@@ -74,9 +82,10 @@ const schema = new mongoose.Schema({
   },
   workingHours: {
     type: workingHoursSchema,
+    required: true,
     default: {},
   },
-}, { timestamps: true });
+}, { timestamps: true, minimize: false });
 
 schema.method({
   /**
@@ -87,12 +96,20 @@ schema.method({
    * @returns {Object[]}
    */
   async bookedDates(options = {}) {
-    const { excludedBookings = [] } = options;
-    const bookings = await Booking.find({
+    const { excludedBookings = [], start: startTimestamp, end: endTimestamp } = options;
+    const query = {
       _id: { $nin: excludedBookings },
       providerId: this._id,
+      status: { $nin: ['canceled'] },
       end: { $gte: new Date() },
-    }).exec();
+    };
+    if (startTimestamp) {
+      query.end = { $gte: new Date(parseInt(startTimestamp, 10)) };
+    }
+    if (endTimestamp) {
+      query.start = { $lte: new Date(parseInt(endTimestamp, 10)) };
+    }
+    const bookings = await Booking.find(query).exec();
     const bookedDates = bookings.map(({ start, end }) => ({ start, end }));
     return bookedDates;
   },
@@ -109,19 +126,21 @@ schema.method({
   async isAvailable(dateRange, options = {}) {
     const { excludedBookings = [] } = options;
     const weekDay = moment(dateRange.start).format('dddd').toLowerCase();
-    const { working: isWorkDay, ...workingDayTimeRange } = this.workingHours[weekDay];
+    const { working: isWorkDay, start, end } = this.workingHours[weekDay];
+
     // Checking if provider works that day
     if (!isWorkDay) {
       console.log(`Provider ${this._id} is not working on ${weekDay}`);
       return false;
     }
+
     // Checking if provider works during those hours
     const timeRange = {
       start: moment(dateRange.start).format('H:mm'),
       end: moment(dateRange.end).format('H:mm'),
     };
-    if (!containsTimeRange(workingDayTimeRange, timeRange)) {
-      console.log(`Provider ${this._id} is only working from ${workingDayTimeRange.start} to ${workingDayTimeRange.end} on ${weekDay}`);
+    if (!containsTimeRange({ start, end }, timeRange)) {
+      console.log(`Provider ${this._id} is only working from ${start} to ${end} on ${weekDay}`);
       return false;
     }
 

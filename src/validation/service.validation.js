@@ -2,6 +2,13 @@ import Joi from '@hapi/joi';
 import { mongoIdRegex } from '../constants/regex';
 
 export default {
+  // GET /services
+  list: {
+    query: Joi.object({
+      active: Joi.bool(),
+    }),
+  },
+
   // POST /services
   create: {
     body: Joi.object({
@@ -15,6 +22,18 @@ export default {
   get: {
     params: Joi.object({
       serviceId: Joi.string().regex(mongoIdRegex).required(),
+    }),
+  },
+
+  // PATCH /services/:serviceId
+  update: {
+    params: Joi.object({
+      serviceId: Joi.string().regex(mongoIdRegex).required(),
+    }),
+    body: Joi.object({
+      name: Joi.string(),
+      description: Joi.string(),
+      active: Joi.bool(),
     }),
   },
 

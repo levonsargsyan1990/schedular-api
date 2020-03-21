@@ -1,4 +1,3 @@
-import Organization from '../../models/organization.model';
 import { Success } from '../../utils';
 
 /**
@@ -11,9 +10,8 @@ import { Success } from '../../utils';
  */
 export const list = async (req, res, next) => {
   try {
-    const { user: { _id: organizationId } } = req;
-    const organization = await Organization.findOne({ _id: organizationId }).exec();
-    const providers = await organization.providersAsync();
+    const { user: organization, query: { active } } = req;
+    const providers = await organization.providersAsync({ active });
     return new Success({ data: providers, res }).send();
   } catch (err) {
     next(err);
