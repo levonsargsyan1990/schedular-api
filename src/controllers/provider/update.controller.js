@@ -1,5 +1,6 @@
 import httpStatus from 'http-status';
 import mongoose from 'mongoose';
+import merge from 'lodash/merge';
 import difference from 'lodash/difference';
 import Service from '../../models/service.model';
 import { Success, APIError } from '../../utils';
@@ -52,7 +53,7 @@ export const update = async (req, res, next) => {
     }
 
     provider.name = name;
-    provider.workingHours = { ...provider.workingHours, ...workingHours };
+    provider.workingHours = merge(provider.workingHours, workingHours);
     provider.active = active;
 
     await provider.save();

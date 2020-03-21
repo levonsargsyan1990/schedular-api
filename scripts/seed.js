@@ -1,6 +1,6 @@
-import fs from 'fs';
 import moment from 'moment';
 import jwt from 'jsonwebtoken';
+import axios from 'axios';
 import env from '../src/config/env';
 import { init as initDatabase } from '../src/lib/mongo';
 
@@ -11,7 +11,7 @@ import Option from '../src/models/option.model';
 import Provider from '../src/models/provider.model';
 import Booking from '../src/models/booking.model';
 
-import postman from '../postman/template.json';
+const postmanData = { values: [] };
 
 initDatabase();
 
@@ -25,19 +25,36 @@ const dropDB = async () => {
   console.info('Data successfully removed.');
 };
 
-const addEnv = (key, value) => postman.values.push({ key, value, enabled: true });
+const addEnv = (key, value) => postmanData.values.push({ key, value });
+
+const getPostmanEnvs = async () => {
+  const { data: { environments } } = await axios.get(
+    'https://api.getpostman.com/environments',
+    {
+      headers: {
+        'X-Api-Key': env.postman.apiKey,
+      },
+    },
+  );
+  const mappedData = environments.reduce((acc, { id, ...rest }) => ({ ...acc, [id]: rest }), {});
+  return mappedData;
+};
+
+const updatePostmanEnv = async (uid, data) => axios.put(
+  `https://api.getpostman.com/environments/${uid}`,
+  { environment: data },
+  {
+    headers: {
+      'X-Api-Key': env.postman.apiKey,
+    },
+  },
+);
 
 const populateDB = async () => {
-
   try {
     // Removing old data
     await dropDB();
     console.info('Populating DB with sample data...');
-
-    postman.name = `Local (port ${env.port})`;
-
-    addEnv('port', env.port);
-    addEnv('baseURL', `http://localhost:${env.port}`);
 
     // Creating organization
     const organization = new Organization({
@@ -188,20 +205,19 @@ const populateDB = async () => {
     const [booking] = bookings;
     addEnv('bookingId', booking._id.toString());
     console.info('DB successfully populated.');
-    console.info('Generating Postman environment file...');
-    fs.writeFile(
-      `./postman/generated/${moment().format('DD-MM-YYYY')}.local.json`,
-      JSON.stringify(postman),
-      (err) => {
-        if (err) {
-          console.error('Failed to save postman file', err);
-          process.exit(1);
-        } else {
-          console.info('Postman environment file successfully created');
-          process.exit(0);
-        }
-      },
+
+    console.info('Updating Postman environments...');
+    // Fetching Postman environments
+    const postmanEnvironments = await getPostmanEnvs();
+    addEnv('port', env.port);
+    addEnv('baseURL', `http://localhost:${env.port}`);
+    // Fetching Postman local environment
+    await updatePostmanEnv(
+      postmanEnvironments[env.postman.localEnvId].uid,
+      { ...postmanData, name: `Local (port ${env.port}) YAAAY!` },
     );
+    console.info('Postman environment successfully updated.');
+    process.exit(0);
   } catch (err) {
     console.log('Failed to populate DB', err);
     process.exit(1);

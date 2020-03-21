@@ -5,7 +5,7 @@ import { datesOverlapArray, containsTimeRange } from '../utils/helpers';
 
 const { ObjectId } = mongoose.Schema.Types;
 
-const daySchema = {
+const daySchema = new mongoose.Schema({
   working: {
     type: Boolean,
     default: true,
@@ -22,7 +22,7 @@ const daySchema = {
       return this.working ? '18:00' : '';
     },
   },
-};
+}, { minimize: false });
 
 const workingHoursSchema = new mongoose.Schema({
   monday: {
@@ -60,7 +60,7 @@ const workingHoursSchema = new mongoose.Schema({
     default: {},
     required: true,
   },
-});
+}, { minimize: false });
 
 const schema = new mongoose.Schema({
   organizationId: {
@@ -85,7 +85,7 @@ const schema = new mongoose.Schema({
     required: true,
     default: {},
   },
-}, { timestamps: true });
+}, { timestamps: true, minimize: false });
 
 schema.method({
   /**
@@ -119,8 +119,7 @@ schema.method({
   async isAvailable(dateRange, options = {}) {
     const { excludedBookings = [] } = options;
     const weekDay = moment(dateRange.start).format('dddd').toLowerCase();
-    console.log(weekDay)
-    const { working: isWorkDay, ...workingDayTimeRange } = this.workingHours[weekDay];
+    const { working: isWorkDay, start, end } = this.workingHours[weekDay];
 
     // Checking if provider works that day
     if (!isWorkDay) {
@@ -133,8 +132,8 @@ schema.method({
       start: moment(dateRange.start).format('H:mm'),
       end: moment(dateRange.end).format('H:mm'),
     };
-    if (!containsTimeRange(workingDayTimeRange, timeRange)) {
-      console.log(`Provider ${this._id} is only working from ${workingDayTimeRange.start} to ${workingDayTimeRange.end} on ${weekDay}`);
+    if (!containsTimeRange({ start, end }, timeRange)) {
+      console.log(`Provider ${this._id} is only working from ${start} to ${end} on ${weekDay}`);
       return false;
     }
 
