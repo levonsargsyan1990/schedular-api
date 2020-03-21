@@ -11,8 +11,6 @@ import Option from '../src/models/option.model';
 import Provider from '../src/models/provider.model';
 import Booking from '../src/models/booking.model';
 
-const postmanData = { values: [] };
-
 initDatabase();
 
 const dropDB = async () => {
@@ -24,8 +22,6 @@ const dropDB = async () => {
   await Booking.deleteMany({});
   console.info('Data successfully removed.');
 };
-
-const addEnv = (key, value) => postmanData.values.push({ key, value });
 
 const getPostmanEnvs = async () => {
   const { data: { environments } } = await axios.get(
@@ -51,6 +47,8 @@ const updatePostmanEnv = async (uid, data) => axios.put(
 );
 
 const populateDB = async () => {
+  const values = [];
+
   try {
     // Removing old data
     await dropDB();
@@ -61,12 +59,12 @@ const populateDB = async () => {
       name: 'Lensman',
     });
 
-    addEnv('apiKey', organization.apiKey);
-    addEnv('apiSecret', organization.apiSecret);
+    values.push({ key: 'apiKey', value: organization.apiKey });
+    values.push({ key: 'apiSecret', value: organization.apiSecret });
 
     await organization.save();
     const token = jwt.sign({ organizationId: organization._id }, env.jwt.secret);
-    addEnv('token', token);
+    values.push({ key: 'token', value: token });
 
     // Creating services
     const serviceTemplates = [
@@ -89,7 +87,7 @@ const populateDB = async () => {
 
     const services = await Promise.all(servicePromises);
     const [service] = services;
-    addEnv('serviceId', service._id.toString());
+    values.push({ key: 'serviceId', value: service._id.toString() });
 
     // Creating options
     const optionTemplates = [
@@ -116,7 +114,7 @@ const populateDB = async () => {
 
     const options = await Promise.all(optionPromises);
     const [option] = options;
-    addEnv('optionId', option._id.toString());
+    values.push({ key: 'optionId', value: option._id.toString() });
 
     // Creating providers
     const providerTemplates = [
@@ -139,7 +137,7 @@ const populateDB = async () => {
 
     const providers = await Promise.all(providerPromises);
     const [provider] = providers;
-    addEnv('providerId', provider._id.toString());
+    values.push({ key: 'providerId', value: provider._id.toString() });
 
     // Creating bookings
     const bookingTemplates = [
@@ -203,18 +201,30 @@ const populateDB = async () => {
 
     const bookings = await Promise.all(bookingPromises);
     const [booking] = bookings;
-    addEnv('bookingId', booking._id.toString());
+    values.push({ key: 'bookingId', value: booking._id.toString() });
     console.info('DB successfully populated.');
 
     console.info('Updating Postman environments...');
     // Fetching Postman environments
     const postmanEnvironments = await getPostmanEnvs();
-    addEnv('port', env.port);
-    addEnv('baseURL', `http://localhost:${env.port}`);
-    // Fetching Postman local environment
+    const localValues = [
+      ...values,
+      { key: 'port', value: env.port },
+      { key: 'baseURL', value: `http://localhost:${env.port}` },
+    ];
+    // updating Postman local environment
     await updatePostmanEnv(
       postmanEnvironments[env.postman.localEnvId].uid,
-      { ...postmanData, name: `Local (port ${env.port}) YAAAY!` },
+      { values: localValues, name: `Local (port ${env.port})` },
+    );
+    const stagingValues = [
+      ...values,
+      { key: 'port', value: env.port },
+      { key: 'baseURL', value: 'https://api.schedular.io/v1' },
+    ];
+    await updatePostmanEnv(
+      postmanEnvironments[env.postman.stagingEnvId].uid,
+      { values: stagingValues, name: 'Staging API' },
     );
     console.info('Postman environment successfully updated.');
     process.exit(0);
