@@ -24,36 +24,43 @@ const daySchema = {
   },
 };
 
-const workingHoursSchema = {
+const workingHoursSchema = new mongoose.Schema({
   monday: {
     type: daySchema,
     default: {},
+    required: true,
   },
   tuesday: {
     type: daySchema,
     default: {},
+    required: true,
   },
   wednesday: {
     type: daySchema,
     default: {},
+    required: true,
   },
   thursday: {
     type: daySchema,
     default: {},
+    required: true,
   },
   friday: {
     type: daySchema,
     default: {},
+    required: true,
   },
   saturday: {
     type: daySchema,
     default: {},
+    required: true,
   },
   sunday: {
     type: daySchema,
     default: {},
+    required: true,
   },
-};
+});
 
 const schema = new mongoose.Schema({
   organizationId: {
@@ -66,6 +73,7 @@ const schema = new mongoose.Schema({
   },
   services: {
     type: [mongoose.Schema.Types.ObjectId],
+    required: true,
     default: [],
   },
   active: {
@@ -74,6 +82,7 @@ const schema = new mongoose.Schema({
   },
   workingHours: {
     type: workingHoursSchema,
+    required: true,
     default: {},
   },
 }, { timestamps: true });
@@ -91,6 +100,7 @@ schema.method({
     const bookings = await Booking.find({
       _id: { $nin: excludedBookings },
       providerId: this._id,
+      status: { $nin: ['completed', 'canceled'] },
       end: { $gte: new Date() },
     }).exec();
     const bookedDates = bookings.map(({ start, end }) => ({ start, end }));
@@ -109,6 +119,7 @@ schema.method({
   async isAvailable(dateRange, options = {}) {
     const { excludedBookings = [] } = options;
     const weekDay = moment(dateRange.start).format('dddd').toLowerCase();
+    console.log(weekDay)
     const { working: isWorkDay, ...workingDayTimeRange } = this.workingHours[weekDay];
 
     // Checking if provider works that day

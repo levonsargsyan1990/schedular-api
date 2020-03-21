@@ -14,11 +14,4 @@ export default {
       currency: Joi.string(),
     }),
   },
-
-  // GET /bookings/:bookingId
-  // get: {
-  //   params: Joi.object({
-  //     providerId: Joi.string().regex(mongoIdRegex).required(),
-  //   }),
-  // },
 };

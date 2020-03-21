@@ -38,14 +38,14 @@ const schema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  end: {
+    type: Date,
+    required: true,
+  },
   status: {
     type: String,
     default: 'created',
     enum: ['created', 'canceled', 'completed', 'in-progress'],
-  },
-  end: {
-    type: Date,
-    required: true,
   },
   location: {
     type: locationSchema,
@@ -55,7 +55,7 @@ const schema = new mongoose.Schema({
     required: true,
   },
   duration: {
-    type: String,
+    type: Number,
     required: true,
   },
   durationTimeUnit: {

@@ -12,8 +12,8 @@ export default {
       start: Joi.date().greater('now').required(),
       location: Joi.object({
         address: Joi.string(),
-        long: Joi.number().positive().required(),
-        lat: Joi.number().positive().required(),
+        long: Joi.number().required(),
+        lat: Joi.number().required(),
       }),
     }),
   },
