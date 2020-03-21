@@ -8,8 +8,8 @@ import { Success } from '../../utils';
  */
 export const getBookedDates = async (req, res, next) => {
   try {
-    const { provider } = req;
-    const bookedDates = await provider.bookedDates();
+    const { provider, query: { start, end } } = req;
+    const bookedDates = await provider.bookedDates({ start, end });
     return new Success({ data: bookedDates, res }).send();
   } catch (err) {
     next(err);

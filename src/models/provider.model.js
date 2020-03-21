@@ -96,13 +96,20 @@ schema.method({
    * @returns {Object[]}
    */
   async bookedDates(options = {}) {
-    const { excludedBookings = [] } = options;
-    const bookings = await Booking.find({
+    const { excludedBookings = [], start: startTimestamp, end: endTimestamp } = options;
+    const query = {
       _id: { $nin: excludedBookings },
       providerId: this._id,
-      status: { $nin: ['completed', 'canceled'] },
+      status: { $nin: ['canceled'] },
       end: { $gte: new Date() },
-    }).exec();
+    };
+    if (startTimestamp) {
+      query.end = { $gte: new Date(parseInt(startTimestamp, 10)) };
+    }
+    if (endTimestamp) {
+      query.start = { $lte: new Date(parseInt(endTimestamp, 10)) };
+    }
+    const bookings = await Booking.find(query).exec();
     const bookedDates = bookings.map(({ start, end }) => ({ start, end }));
     return bookedDates;
   },
