@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import Booking from './booking.model';
 import Service from './service.model';
 import Provider from './provider.model';
+import Option from './option.model';
 import { APICredentials } from '../utils';
 
 const daySchema = {
@@ -83,7 +84,7 @@ schema.method({
    *
    * @returns
    */
-  bookingsAsync() {
+  bookings() {
     return Booking.find({ organizationId: this._id }).exec();
   },
   /**
@@ -93,7 +94,7 @@ schema.method({
    * @param {[Boolean]} options.active - Look for active / inactive services if set
    * @returns {Object[]}
    */
-  servicesAsync({ active }) {
+  services({ active }) {
     const query = { organizationId: this._id };
     if (active !== undefined) {
       query.active = active;
@@ -107,12 +108,26 @@ schema.method({
    * @param {[Boolean]} options.active - Look for active / inactive provider if set
    * @returns {Object[]}
    */
-  providersAsync({ active }) {
+  providers({ active }) {
     const query = { organizationId: this._id };
     if (active !== undefined) {
       query.active = active;
     }
     return Provider.find(query).exec();
+  },
+  /**
+   * Finds all options of organization
+   *
+   * @param {Object} options - Query options
+   * @param {[Boolean]} options.active - Look for active / inactive option if set
+   * @returns {Object[]}
+   */
+  options({ active }) {
+    const query = { organizationId: this._id };
+    if (active !== undefined) {
+      query.active = active;
+    }
+    return Option.find(query).exec();
   },
 });
 

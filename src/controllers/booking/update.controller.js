@@ -25,7 +25,7 @@ import { Success, APIError } from '../../utils';
 export const update = async (req, res, next) => {
   try {
     const {
-      user: organization,
+      organization,
       body,
       booking,
     } = req;

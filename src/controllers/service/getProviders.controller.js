@@ -9,7 +9,7 @@ import { Success } from '../../utils';
 export const getProviders = async (req, res, next) => {
   try {
     const { service } = req;
-    const providers = await service.providersAsync();
+    const providers = await service.providers();
     return new Success({ data: providers, res }).send();
   } catch (err) {
     next(err);

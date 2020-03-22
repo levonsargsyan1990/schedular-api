@@ -38,19 +38,16 @@ export const init = () => {
     'jwt',
     new JwtStrategy(jwtOptions, async (payload, done) => {
       console.log('Authentication check');
-      try {
-        const { organizationId } = payload;
-        const organization = await Organization.findOne({
-          _id: organizationId,
-        }).exec();
-        if (organization) {
-          console.log('Organization found in db in passport');
-          done(null, organization);
-        } else {
-          done(null, null);
-        }
-      } catch (err) {
-        done(err);
+      const { organizationId } = payload;
+      const organization = await Organization.findOne({
+        _id: organizationId,
+      }).exec();
+      if (organization) {
+        console.log('Organization found');
+        done(null, organization);
+      } else {
+        console.log('Organization not found');
+        done(null, null);
       }
     }),
   );

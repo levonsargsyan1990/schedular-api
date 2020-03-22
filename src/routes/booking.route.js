@@ -3,7 +3,7 @@ import { validate } from 'express-validation';
 import {
   list, get, create, update,
 } from '../controllers/booking';
-import { bookingExists } from '../middlewares/booking.middleware';
+import { bookingExists } from '../middleware/booking.middleware';
 import bookingValidation from '../validation/booking.validation';
 
 const router = express.Router();

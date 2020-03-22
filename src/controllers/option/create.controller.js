@@ -21,7 +21,7 @@ import { Success, APIError } from '../../utils';
 export const create = async (req, res, next) => {
   try {
     const {
-      user: organization, body, body: {
+      organization, body, body: {
         serviceId: serviceStringId,
       },
     } = req;

@@ -9,7 +9,7 @@ import { Success } from '../../utils';
 export const getOptions = async (req, res, next) => {
   try {
     const { service } = req;
-    const options = await service.optionsAsync();
+    const options = await service.options();
     return new Success({ data: options, res }).send();
   } catch (err) {
     next(err);

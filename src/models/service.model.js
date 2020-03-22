@@ -31,7 +31,7 @@ schema.method({
    *
    * @returns
    */
-  providersAsync() {
+  providers() {
     return Provider.find({ services: this._id }).exec();
   },
   /**
@@ -39,8 +39,24 @@ schema.method({
    *
    * @returns
    */
-  optionsAsync() {
+  options() {
     return Option.find({ serviceId: this._id }).exec();
+  },
+  /**
+   * Deletes all options of service
+   *
+   * @returns
+   */
+  removeOptions() {
+    return Option.deleteMany({ serviceId: this._id }).exec();
+  },
+  /**
+   * Deletes service from providers
+   *
+   * @returns
+   */
+  removeFromProviders() {
+    return Provider.updateMany({ services: this._id }, { $pull: { services: this._id } }).exec();
   },
 });
 

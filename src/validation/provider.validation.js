@@ -111,8 +111,26 @@ export default {
     }),
   },
 
+  // DELETE /providers/:providerId
+  remove: {
+    params: Joi.object({
+      providerId: Joi.string().regex(mongoIdRegex).required(),
+    }),
+  },
+
   // GET /providers/:providerId/booked
   getBookedDates: {
+    params: Joi.object({
+      providerId: Joi.string().regex(mongoIdRegex).required(),
+    }),
+    query: Joi.object({
+      start: Joi.date().greater('now').timestamp(),
+      end: Joi.date().greater('now').timestamp(),
+    }),
+  },
+
+  // GET /providers/:providerId/bookings
+  getBookings: {
     params: Joi.object({
       providerId: Joi.string().regex(mongoIdRegex).required(),
     }),

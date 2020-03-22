@@ -1,35 +1,35 @@
 import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import { APIError } from '../utils';
-import Provider from '../models/provider.model';
+import Booking from '../models/booking.model';
 
 /**
- * Checking if provider exists
+ * Checking if booking exists
  *
  * @param {Object} req - Request object
  * @param {Object} req.user - Authenticated organization
  * @param {Object} req.user._id - ID of organization
  * @param {Object} req.params - Request params
- * @param {string} req.params.providerId - Id of provider
+ * @param {string} req.params.bookingId - Id of booking
  */
-export const providerExists = async (req, res, next) => {
+export const bookingExists = async (req, res, next) => {
   try {
     const {
-      user: organization,
-      params: { providerId: providerStringId },
+      organization,
+      params: { bookingId: bookingStringId },
     } = req;
-    const providerId = new mongoose.Types.ObjectId(providerStringId);
-    const provider = await Provider.findOne({
-      _id: providerId,
+    const bookingId = new mongoose.Types.ObjectId(bookingStringId);
+    const booking = await Booking.findOne({
+      _id: bookingId,
       organizationId: organization._id,
     }).exec();
-    if (!provider) {
+    if (!booking) {
       throw new APIError({
         status: httpStatus.BAD_REQUEST,
-        message: 'No provider found with that ID',
+        message: 'No booking found with that ID',
       });
     }
-    req.provider = provider;
+    req.booking = booking;
     next();
   } catch (err) {
     next(err);
