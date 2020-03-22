@@ -15,7 +15,7 @@ import Service from '../models/service.model';
 export const serviceExists = async (req, res, next) => {
   try {
     const {
-      user: organization,
+      organization,
       params: { serviceId: serviceStringId },
     } = req;
     const serviceId = new mongoose.Types.ObjectId(serviceStringId);

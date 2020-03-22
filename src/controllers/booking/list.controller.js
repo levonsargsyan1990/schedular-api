@@ -9,7 +9,7 @@ import { Success } from '../../utils';
  */
 export const list = async (req, res, next) => {
   try {
-    const { user: organization } = req;
+    const { organization } = req;
     const bookings = await organization.bookings();
     return new Success({ data: bookings, res }).send();
   } catch (err) {

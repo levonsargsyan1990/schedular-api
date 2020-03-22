@@ -15,7 +15,7 @@ import Booking from '../models/booking.model';
 export const bookingExists = async (req, res, next) => {
   try {
     const {
-      user: organization,
+      organization,
       params: { bookingId: bookingStringId },
     } = req;
     const bookingId = new mongoose.Types.ObjectId(bookingStringId);

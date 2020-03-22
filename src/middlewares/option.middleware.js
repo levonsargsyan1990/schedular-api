@@ -15,7 +15,7 @@ import Option from '../models/option.model';
 export const optionExists = async (req, res, next) => {
   try {
     const {
-      user: organization,
+      organization,
       params: { optionId: optionStringId },
     } = req;
     const optionId = new mongoose.Types.ObjectId(optionStringId);

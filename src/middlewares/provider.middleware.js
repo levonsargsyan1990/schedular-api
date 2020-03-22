@@ -15,7 +15,7 @@ import Provider from '../models/provider.model';
 export const providerExists = async (req, res, next) => {
   try {
     const {
-      user: organization,
+      organization,
       params: { providerId: providerStringId },
     } = req;
     const providerId = new mongoose.Types.ObjectId(providerStringId);
