@@ -1,4 +1,3 @@
-import Option from '../../models/option.model';
 import { Success } from '../../utils';
 
 /**
@@ -9,8 +8,8 @@ import { Success } from '../../utils';
  */
 export const remove = async (req, res, next) => {
   try {
-    const { option, user: organization } = req;
-    await Option.deleteOne({ _id: option._id, organizationId: organization._id });
+    const { option } = req;
+    await option.delete();
     return new Success({ data: option, res }).send();
   } catch (err) {
     next(err);

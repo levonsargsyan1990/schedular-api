@@ -111,6 +111,13 @@ export default {
     }),
   },
 
+  // DELETE /providers/:providerId
+  remove: {
+    params: Joi.object({
+      providerId: Joi.string().regex(mongoIdRegex).required(),
+    }),
+  },
+
   // GET /providers/:providerId/booked
   getBookedDates: {
     params: Joi.object({

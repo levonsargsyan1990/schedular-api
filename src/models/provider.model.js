@@ -89,13 +89,13 @@ const schema = new mongoose.Schema({
 
 schema.method({
   /**
-   * Returns array of booked periods for provider
+   * Returns array of bookings for provider
    *
    * @param {Object} [options={}] - optional parameters
    * @param {ObjectId[]} [options.excludedBookings=[]] - array of excluded booking IDs
    * @returns {Object[]}
    */
-  async bookedDates(options = {}) {
+  async bookings(options = {}) {
     const { excludedBookings = [], start: startTimestamp, end: endTimestamp } = options;
     const query = {
       _id: { $nin: excludedBookings },
@@ -109,9 +109,19 @@ schema.method({
     if (endTimestamp) {
       query.start = { $lte: new Date(parseInt(endTimestamp, 10)) };
     }
-    const bookings = await Booking.find(query).exec();
-    const bookedDates = bookings.map(({ start, end }) => ({ start, end }));
-    return bookedDates;
+    return Booking.find(query).exec();
+  },
+
+  /**
+   * Returns array of booked periods for provider
+   *
+   * @param {Object} [options={}] - optional parameters
+   * @param {ObjectId[]} [options.excludedBookings=[]] - array of excluded booking IDs
+   * @returns {Object[]}
+   */
+  async bookedDates(options = {}) {
+    const bookings = await this.bookings(options);
+    return bookings.map(({ start, end }) => ({ start, end }));
   },
   /**
    * Checks if provider is available for specific time period
