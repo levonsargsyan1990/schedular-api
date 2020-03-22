@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import Booking from './booking.model';
 import Service from './service.model';
 import Provider from './provider.model';
+import Option from './option.model';
 import { APICredentials } from '../utils';
 
 const daySchema = {
@@ -113,6 +114,20 @@ schema.method({
       query.active = active;
     }
     return Provider.find(query).exec();
+  },
+  /**
+   * Finds all options of organization
+   *
+   * @param {Object} options - Query options
+   * @param {[Boolean]} options.active - Look for active / inactive option if set
+   * @returns {Object[]}
+   */
+  optionsAsync({ active }) {
+    const query = { organizationId: this._id };
+    if (active !== undefined) {
+      query.active = active;
+    }
+    return Option.find(query).exec();
   },
 });
 
