@@ -128,4 +128,15 @@ export default {
       end: Joi.date().greater('now').timestamp(),
     }),
   },
+
+  // GET /providers/:providerId/bookings
+  getBookings: {
+    params: Joi.object({
+      providerId: Joi.string().regex(mongoIdRegex).required(),
+    }),
+    query: Joi.object({
+      start: Joi.date().greater('now').timestamp(),
+      end: Joi.date().greater('now').timestamp(),
+    }),
+  },
 };

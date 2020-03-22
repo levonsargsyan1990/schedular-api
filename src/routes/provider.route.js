@@ -1,7 +1,7 @@
 import express from 'express';
 import { validate } from 'express-validation';
 import {
-  list, get, create, update, remove, getBookedDates,
+  list, get, create, update, remove, getBookings, getBookedDates,
 } from '../controllers/provider';
 import { providerExists } from '../middlewares/provider.middleware';
 import providerValidation from '../validation/provider.validation';
@@ -24,5 +24,10 @@ router
   .route('/:providerId/booked')
   .all(providerExists)
   .get(validate(providerValidation.getBookedDates), getBookedDates);
+
+router
+  .route('/:providerId/bookings')
+  .all(providerExists)
+  .get(validate(providerValidation.getBookings), getBookings);
 
 export default router;
