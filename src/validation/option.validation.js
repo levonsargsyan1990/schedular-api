@@ -44,4 +44,11 @@ export default {
       currency: Joi.string(),
     }),
   },
+
+  // DELETE /options/:optionId
+  remove: {
+    params: Joi.object({
+      optionId: Joi.string().regex(mongoIdRegex).required(),
+    }),
+  },
 };
