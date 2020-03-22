@@ -3,7 +3,7 @@ import { validate } from 'express-validation';
 import {
   list, get, create, update, remove,
 } from '../controllers/option';
-import { optionExists } from '../middlewares/option.middleware';
+import { optionExists } from '../middleware/option.middleware';
 import optionValidation from '../validation/option.validation';
 
 const router = express.Router();

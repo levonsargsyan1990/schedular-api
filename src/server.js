@@ -11,8 +11,8 @@ import { init as initPassport } from './lib/passport';
 import { checkHealth } from './controllers/health';
 import { login } from './controllers/auth';
 import router from './routes';
-import { converter, notFound, handler } from './middlewares/error';
-import { authenticate } from './middlewares/auth.middleware';
+import { converter, notFound, handler } from './middleware/error';
+import { authenticate } from './middleware/auth.middleware';
 
 if (variables.environment !== 'development') {
   Sentry.init({ dsn: variables.sentry.dsn });

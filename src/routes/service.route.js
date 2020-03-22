@@ -3,7 +3,7 @@ import { validate } from 'express-validation';
 import {
   list, get, create, getProviders, getOptions, update, remove,
 } from '../controllers/service';
-import { serviceExists } from '../middlewares/service.middleware';
+import { serviceExists } from '../middleware/service.middleware';
 import serviceValidation from '../validation/service.validation';
 
 const router = express.Router();
