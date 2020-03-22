@@ -14,4 +14,11 @@ export default {
       currency: Joi.string(),
     }),
   },
+
+  // GET /options/:optionId
+  get: {
+    params: Joi.object({
+      optionId: Joi.string().regex(mongoIdRegex).required(),
+    }),
+  },
 };
