@@ -84,7 +84,7 @@ schema.method({
    *
    * @returns
    */
-  bookingsAsync() {
+  bookings() {
     return Booking.find({ organizationId: this._id }).exec();
   },
   /**
@@ -94,7 +94,7 @@ schema.method({
    * @param {[Boolean]} options.active - Look for active / inactive services if set
    * @returns {Object[]}
    */
-  servicesAsync({ active }) {
+  services({ active }) {
     const query = { organizationId: this._id };
     if (active !== undefined) {
       query.active = active;
@@ -108,7 +108,7 @@ schema.method({
    * @param {[Boolean]} options.active - Look for active / inactive provider if set
    * @returns {Object[]}
    */
-  providersAsync({ active }) {
+  providers({ active }) {
     const query = { organizationId: this._id };
     if (active !== undefined) {
       query.active = active;
@@ -122,7 +122,7 @@ schema.method({
    * @param {[Boolean]} options.active - Look for active / inactive option if set
    * @returns {Object[]}
    */
-  optionsAsync({ active }) {
+  options({ active }) {
     const query = { organizationId: this._id };
     if (active !== undefined) {
       query.active = active;

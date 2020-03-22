@@ -37,6 +37,13 @@ export default {
     }),
   },
 
+  // DELETE /services/:serviceId
+  remove: {
+    params: Joi.object({
+      serviceId: Joi.string().regex(mongoIdRegex).required(),
+    }),
+  },
+
   // GET /services/:serviceId/providers
   getProviders: {
     params: Joi.object({
