@@ -14,8 +14,8 @@ import { Success } from '../../utils';
  */
 export const create = async (req, res, next) => {
   try {
-    const { organization, body } = req;
-    console.log(`Creating service ${body.title} for organization ${organization._id}`);
+    const { organization, body, body: { name } } = req;
+    console.log(`Creating service ${name} for organization ${organization._id}`);
     const service = new Service({ ...body, organizationId: organization._id });
     await service.save();
     return new Success({ data: service, res }).send();

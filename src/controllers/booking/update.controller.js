@@ -30,6 +30,8 @@ export const update = async (req, res, next) => {
       booking,
     } = req;
 
+    console.log(`Updating booking ${booking._id}, ${organization.name} organization ${organization._id}`);
+
     const {
       location = booking.location,
       serviceId: serviceStringId,

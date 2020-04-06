@@ -10,6 +10,7 @@ import { Success } from '../../utils';
 export const list = async (req, res, next) => {
   try {
     const { organization } = req;
+    console.log(`Fetching bookings, ${organization.name} organization (${organization._id})`);
     const bookings = await organization.bookings();
     return new Success({ data: bookings, res }).send();
   } catch (err) {

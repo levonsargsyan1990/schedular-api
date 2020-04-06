@@ -12,7 +12,11 @@ import { Success } from '../../utils';
  */
 export const get = (req, res, next) => {
   try {
-    const { booking } = req;
+    const { booking, organization } = req;
+    console.log(`
+      Fetching booking ${booking._id},
+      ${organization.name} organization ${organization._id}
+    `);
     return new Success({ data: booking, res }).send();
   } catch (err) {
     next(err);

@@ -25,6 +25,12 @@ export const create = async (req, res, next) => {
         serviceId: serviceStringId,
       },
     } = req;
+
+    console.log(`Creating option
+      serviceId ${serviceStringId},
+      ${organization.name} organization ${organization._id}
+    `);
+
     const serviceId = new mongoose.Types.ObjectId(serviceStringId);
     const service = await Service.findOne({
       _id: serviceId,

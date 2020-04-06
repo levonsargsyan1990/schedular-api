@@ -29,6 +29,7 @@ export const bookingExists = async (req, res, next) => {
         message: 'No booking found with that ID',
       });
     }
+    console.log(`Booking found with id ${booking._id}`);
     req.booking = booking;
     next();
   } catch (err) {

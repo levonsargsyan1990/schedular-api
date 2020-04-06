@@ -1,7 +1,7 @@
 {
-  "name": "schedule-api",
+  "name": "schedular-api",
   "version": "1.0.0",
-  "description": "Scheduling API",
+  "description": "Schedular API",
   "main": "server.js",
   "scripts": {
     "start": "node dist/server.js",
@@ -11,18 +11,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/levonsargsyan1990/schedule-api.git"
+    "url": "git+https://github.com/levonsargsyan1990/schedular-api.git"
   },
   "keywords": [
+    "schedular",
     "schedule",
     "api"
   ],
   "author": "Levon Sargsyan",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/levonsargsyan1990/schedule-api/issues"
+    "url": "https://github.com/levonsargsyan1990/schedular-api/issues"
   },
-  "homepage": "https://github.com/levonsargsyan1990/schedule-api#readme",
+  "homepage": "https://github.com/levonsargsyan1990/schedular-api#readme",
   "dependencies": {
     "@hapi/joi": "^17.1.1",
     "@sentry/node": "^5.14.2",

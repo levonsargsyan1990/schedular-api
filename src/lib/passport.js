@@ -43,7 +43,7 @@ export const init = () => {
         _id: organizationId,
       }).exec();
       if (organization) {
-        console.log('Organization found');
+        console.log(`Organization found: ${organization.name} (${organization._id})`);
         done(null, organization);
       } else {
         console.log('Organization not found');
