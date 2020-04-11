@@ -31,7 +31,7 @@ export const init = () => {
 
   const jwtOptions = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: env.jwt.secret,
+    secretOrKey: env.auth.jwt.secret,
   };
 
   passport.use(

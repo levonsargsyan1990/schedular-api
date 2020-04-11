@@ -29,7 +29,7 @@ export const login = (req, res, next) => {
         message: err.message,
       });
     } else {
-      const token = jwt.sign({ organizationId: organization._id }, env.jwt.secret);
+      const token = jwt.sign({ organizationId: organization._id }, env.auth.jwt.secret);
       console.log(`Logged in to ${organization.name} organization (${organization._id})`);
       return new Success({ data: { token }, res }).send();
     }

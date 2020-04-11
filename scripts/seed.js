@@ -63,7 +63,7 @@ const populateDB = async () => {
     values.push({ key: 'apiSecret', value: organization.apiSecret });
 
     await organization.save();
-    const token = jwt.sign({ organizationId: organization._id }, env.jwt.secret);
+    const token = jwt.sign({ organizationId: organization._id }, env.auth.jwt.secret);
     values.push({ key: 'token', value: token });
 
     // Creating services

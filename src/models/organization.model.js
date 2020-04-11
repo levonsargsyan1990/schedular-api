@@ -5,7 +5,7 @@ import Provider from './provider.model';
 import Option from './option.model';
 import { APICredentials } from '../utils';
 
-const daySchema = {
+const daySchema = new mongoose.Schema({
   working: {
     type: Boolean,
     default: true,
@@ -18,7 +18,7 @@ const daySchema = {
     type: String,
     default: '18:00',
   },
-};
+}, { minimize: false });
 
 const workingHoursSchema = {
   monday: {

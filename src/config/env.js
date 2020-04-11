@@ -16,14 +16,18 @@ const {
   POSTMAN_API_KEY,
   POSTMAN_LOCAL_ENV_ID,
   POSTMAN_STAGING_ENV_ID,
+  PASSWORD_SALT_FACTOR,
 } = process.env;
 
 const variables = {
   environment: NODE_ENV,
   port: PORT,
-  jwt: {
-    secret: JWT_SECRET,
-    expirationInterval: JWT_EXPIRATION_MINUTES,
+  auth: {
+    passwordSalt: PASSWORD_SALT_FACTOR,
+    jwt: {
+      secret: JWT_SECRET,
+      expirationInterval: JWT_EXPIRATION_MINUTES,
+    },
   },
   mongo: {
     url: MONGO_URL,
