@@ -8,7 +8,7 @@ import Organization from '../models/organization.model';
 
 export const init = () => {
   passport.use(
-    'login',
+    'organizationLogin',
     new LocalStrategy(
       {
         usernameField: 'apiKey',

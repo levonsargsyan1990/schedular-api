@@ -40,7 +40,12 @@ const schema = new mongoose.Schema({
     required: true,
     match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address'],
   },
-  password: { type: String, required: true },
+  password: {
+    type: String,
+    required: true,
+    min: 8,
+    select: false,
+  },
 }, { timestamps: true });
 
 schema.pre('save', async function (next) {
@@ -50,7 +55,7 @@ schema.pre('save', async function (next) {
   }
   // generate a salt
   try {
-    const salt = await bcrypt.genSalt(env.auth.passwordSalt);
+    const salt = await bcrypt.genSalt(env.auth.saltRounds);
     // hash the password using our new salt
     const hash = await bcrypt.hash(this.password, salt);
     // override the cleartext password with the hashed one

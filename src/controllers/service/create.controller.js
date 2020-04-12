@@ -5,8 +5,8 @@ import { Success } from '../../utils';
  * Creates new service
  *
  * @param {Object} req - Request object
- * @param {Object} req.user - Authenticated organization
- * @param {Object} req.user._id - ID of organization
+ * @param {Object} req.organization - Authenticated organization
+ * @param {Object} req.organization._id - ID of organization
  * @param {Object} req.body - Body of request
  * @param {String} req.body.name - Name of service
  * @param {String} [req.body.description=''] - Description of service

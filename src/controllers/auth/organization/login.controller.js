@@ -1,20 +1,20 @@
 import passport from 'passport';
 import httpStatus from 'http-status';
 import jwt from 'jsonwebtoken';
-import { Success, APIError } from '../../utils';
+import { Success, APIError } from '../../../utils';
 
-import env from '../../config/env';
+import env from '../../../config/env';
 
 /**
- * Logging in
+ * Logging in as Organization
  *
  * @param {*} req
  * @param {*} res
  * @param {*} next
  */
 export const login = (req, res, next) => {
-  console.log('Login attempt');
-  passport.authenticate('login', async (err, organization, info) => {
+  console.log('Organization login attempt');
+  passport.authenticate('organizationLogin', async (err, organization, info) => {
     if (err) {
       console.log('Failed to login:', err);
       throw new APIError({

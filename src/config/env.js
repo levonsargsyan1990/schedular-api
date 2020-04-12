@@ -16,14 +16,14 @@ const {
   POSTMAN_API_KEY,
   POSTMAN_LOCAL_ENV_ID,
   POSTMAN_STAGING_ENV_ID,
-  PASSWORD_SALT_FACTOR,
+  PASSWORD_SALT_ROUNDS,
 } = process.env;
 
 const variables = {
   environment: NODE_ENV,
   port: PORT,
   auth: {
-    passwordSalt: PASSWORD_SALT_FACTOR,
+    saltRounds: parseInt(PASSWORD_SALT_ROUNDS, 10),
     jwt: {
       secret: JWT_SECRET,
       expirationInterval: JWT_EXPIRATION_MINUTES,

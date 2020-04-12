@@ -9,8 +9,7 @@ import variables from './config/env';
 import { init as initDatabase } from './lib/mongo';
 import { init as initPassport } from './lib/passport';
 import { checkHealth } from './controllers/health';
-import { login } from './controllers/auth';
-import router from './routes';
+import { authRouter, privateRouter } from './routes';
 import { converter, notFound, handler } from './middleware/error';
 import { authenticate } from './middleware/auth.middleware';
 
@@ -43,9 +42,9 @@ app.use(passport.initialize());
 
 app.get('/health', checkHealth);
 
-app.post('/login', login);
+app.use('/auth', authRouter);
 
-app.use(authenticate, router);
+app.use(authenticate, privateRouter);
 
 // The error handler must be before any other error middleware and after all controllers
 app.use(Sentry.Handlers.errorHandler());
