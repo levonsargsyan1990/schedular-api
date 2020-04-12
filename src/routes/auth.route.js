@@ -21,8 +21,10 @@ userRouter
   .route('/login')
   .post(validate(authValidation.user.login), user.login);
 
-export const authRouter = express.Router();
+const authRouter = express.Router();
 
 authRouter
   .use('/user', userRouter)
   .use('/organization', organizationRouter);
+
+export default authRouter;

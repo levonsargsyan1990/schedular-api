@@ -63,9 +63,9 @@ export const init = () => {
   };
 
   passport.use(
-    'jwt',
+    'organization-jwt',
     new JwtStrategy(jwtOptions, async (payload, done) => {
-      console.log('Authentication check');
+      console.log('Organization authentication check');
       const { organizationId } = payload;
       const organization = await Organization.findOne({
         _id: organizationId,
@@ -75,6 +75,24 @@ export const init = () => {
         done(null, organization);
       } else {
         console.log('Organization not found');
+        done(null, null);
+      }
+    }),
+  );
+
+  passport.use(
+    'user-jwt',
+    new JwtStrategy(jwtOptions, async (payload, done) => {
+      console.log('User authentication check');
+      const { userId } = payload;
+      const user = await User.findOne({
+        _id: userId,
+      }).exec();
+      if (user) {
+        console.log(`User found: ${user._id}`);
+        done(null, user);
+      } else {
+        console.log('User not found');
         done(null, null);
       }
     }),

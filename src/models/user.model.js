@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
+import find from 'lodash/find';
 
 import env from '../config/env';
 
@@ -70,11 +71,37 @@ schema.method({
   /**
    * Checks if password is correct
    *
-   * @returns
+   * @param {String} candidatePassword time period to check
+   * @returns {Boolean}
    */
   async comparePassword(candidatePassword) {
     return bcrypt.compare(candidatePassword, this.password);
   },
+
+  /**
+   * Adds new organization
+   *
+   * @param {Object} params New organization parameters
+   * @param {ObjectId} params.organizationId ID of new organization
+   * @param {String} params.role Role of user in new organization
+   * @returns {User}
+   */
+  // async addOrganization({ organizationId, role = 'member' }) {
+  //   // TODO: check for limit of organizations
+  //   const organization = find(this.organizations, { organizationId });
+  //   console.log({ organization });
+  //   if (!organization) {
+  //     const newOrganization = {
+  //       organizationId,
+  //       role,
+  //     };
+  //     console.log(this, [...this.organizations, newOrganization]);
+  //     this.organizations = [...this.organizations, newOrganization];
+  //     this.firstName = 'LEO';
+  //     // return newOrganization;
+  //   }
+  //   // return organization;
+  // },
 });
 
 const User = mongoose.model('User', schema);
