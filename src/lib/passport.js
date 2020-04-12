@@ -4,9 +4,37 @@ import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import env from '../config/env';
 
 // import models
+import User from '../models/user.model';
 import Organization from '../models/organization.model';
 
 export const init = () => {
+  passport.use(
+    'userLogin',
+    new LocalStrategy(
+      {
+        usernameField: 'email',
+        passwordField: 'password',
+        session: false,
+      },
+      async (email, password, done) => {
+        try {
+          const user = await User.findOne({ email }).select('+password').exec();
+          console.log('User found', user);
+          if (!user) {
+            return done(null, null, { message: 'User not found' });
+          }
+          const isMatch = await user.comparePassword(password);
+          if (!isMatch) {
+            return done(null, null, { message: 'Incorrect password' });
+          }
+          return done(null, user);
+        } catch (err) {
+          done(err);
+        }
+      },
+    ),
+  );
+
   passport.use(
     'organizationLogin',
     new LocalStrategy(

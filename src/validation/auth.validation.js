@@ -20,5 +20,13 @@ export default {
         password: Joi.string().min(8).required(),
       }),
     },
+
+    // POST /auth/user/login
+    login: {
+      body: Joi.object({
+        email: Joi.string().email().required(),
+        password: Joi.string().min(8).required(),
+      }),
+    },
   },
 };

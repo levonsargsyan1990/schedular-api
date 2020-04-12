@@ -9,7 +9,9 @@ import env from '../../../config/env';
  * Logging in as Organization
  *
  * @param {*} req
- * @param {*} res
+ * @param {Object} req.body - Body of request
+ * @param {String} req.body.email - Email of user
+ * @param {String} req.body.password - Password of user
  * @param {*} next
  */
 export const login = (req, res, next) => {
@@ -26,7 +28,7 @@ export const login = (req, res, next) => {
       console.log('Failed to login', info.message);
       throw new APIError({
         status: httpStatus.BAD_REQUEST,
-        message: err.message,
+        message: info.message,
       });
     } else {
       const token = jwt.sign({ organizationId: organization._id }, env.auth.jwt.secret);

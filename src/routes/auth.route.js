@@ -17,6 +17,10 @@ userRouter
   .route('/signup')
   .post(validate(authValidation.user.signup), user.signup);
 
+userRouter
+  .route('/login')
+  .post(validate(authValidation.user.login), user.login);
+
 export const authRouter = express.Router();
 
 authRouter
