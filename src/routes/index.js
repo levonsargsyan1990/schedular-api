@@ -2,6 +2,7 @@ import express from 'express';
 import authRoutes from './auth.route';
 import privateRoutes from './private.route';
 import organizationRoutes from './organization.route';
+import userRoutes from './user.route';
 
 import {
   user as userAuthMiddleware,
@@ -15,6 +16,8 @@ const router = express.Router();
 router.get('/health', checkHealth);
 
 router.use('/auth', authRoutes);
+
+router.use('/users', userAuthMiddleware, userRoutes);
 
 router.use('/organizations', userAuthMiddleware, organizationRoutes);
 
