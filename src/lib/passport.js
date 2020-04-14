@@ -36,7 +36,7 @@ export const init = () => {
   );
 
   passport.use(
-    'organizationLogin',
+    'apiLogin',
     new LocalStrategy(
       {
         usernameField: 'apiKey',

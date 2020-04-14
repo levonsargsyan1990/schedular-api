@@ -1,12 +1,21 @@
 import Joi from '@hapi/joi';
+import { mongoIdRegex } from '../constants/regex';
 
 export default {
-  organization: {
-    // POST /auth/organization/login
+  api: {
+    // POST /auth/api/login
     login: {
       body: Joi.object({
         apiKey: Joi.string().required(),
         apiSecret: Joi.string().required(),
+      }),
+    },
+  },
+  organization: {
+    // POST /auth/organization/login
+    login: {
+      body: Joi.object({
+        organizationId: Joi.string().regex(mongoIdRegex).required(),
       }),
     },
   },

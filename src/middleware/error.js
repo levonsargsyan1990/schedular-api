@@ -19,10 +19,9 @@ export const handler = (err, req, res, next) => {
 
   if (variables.environment !== 'development') {
     delete response.stack;
-  } else {
+  } else if (response.stack) {
     console.log(`> Stack: ${response.stack}`);
   }
-
 
   res.status(err.status);
   res.json(response);

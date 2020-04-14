@@ -5,6 +5,7 @@ import env from '../src/config/env';
 import { init as initDatabase } from '../src/lib/mongo';
 
 // Importing mongoose models
+import User from '../src/models/user.model';
 import Organization from '../src/models/organization.model';
 import Service from '../src/models/service.model';
 import Option from '../src/models/option.model';
@@ -15,6 +16,7 @@ initDatabase();
 
 const dropDB = async () => {
   console.info('Removing existing data...');
+  await User.deleteMany({});
   await Organization.deleteMany({});
   await Service.deleteMany({});
   await Option.deleteMany({});
@@ -65,6 +67,25 @@ const populateDB = async () => {
     await organization.save();
     const token = jwt.sign({ organizationId: organization._id }, env.auth.jwt.secret);
     values.push({ key: 'token', value: token });
+    values.push({ key: 'organizationId', value: organization._id.toString() });
+
+    // Creating user
+    const user = new User({
+      firstName: 'Levon',
+      lastName: 'Sargsyan',
+      email: 'levonsargsyan1990@gmail.com',
+      password: 'levonsargsyan1990',
+      organizations: [
+        {
+          organizationId: organization._id,
+          role: 'owner',
+        },
+      ],
+    });
+    await user.save();
+    const userToken = jwt.sign({ userId: user._id }, env.auth.jwt.secret);
+    values.push({ key: 'userToken', value: userToken });
+    values.push({ key: 'userId', value: user._id.toString() });
 
     // Creating services
     const serviceTemplates = [
