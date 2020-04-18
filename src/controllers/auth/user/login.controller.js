@@ -20,8 +20,8 @@ export const login = (req, res, next) => {
     if (err || info) {
       console.log('Failed to login:', err ? err.message : info.message);
       const apiError = new APIError({
-        status: httpStatus.INTERNAL_SERVER_ERROR,
-        message: 'incorrect credentials',
+        status: httpStatus.BAD_REQUEST,
+        message: 'Incorrect credentials',
       });
       return next(apiError);
     }
