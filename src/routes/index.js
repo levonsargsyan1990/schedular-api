@@ -19,7 +19,7 @@ router.use('/auth', authRoutes);
 
 router.use('/users', userAuthMiddleware, userRoutes);
 
-router.use('/organizations', userAuthMiddleware, organizationRoutes);
+router.use('/organizations', organizationRoutes);
 
 router.use(organizationAuthMiddleware, privateRoutes);
 
