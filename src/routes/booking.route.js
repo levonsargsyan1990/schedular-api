@@ -1,7 +1,7 @@
 import express from 'express';
 import { validate } from 'express-validation';
 import {
-  list, get, create, update,
+  list, get, create, update, remove,
 } from '../controllers/booking';
 import { bookingExists } from '../middleware/booking.middleware';
 import bookingValidation from '../validation/booking.validation';
@@ -17,6 +17,7 @@ router
   .route('/:bookingId')
   .all(bookingExists)
   .get(validate(bookingValidation.get), get)
-  .patch(validate(bookingValidation.update), update);
+  .patch(validate(bookingValidation.update), update)
+  .delete(validate(bookingValidation.remove), remove);
 
 export default router;

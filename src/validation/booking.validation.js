@@ -42,4 +42,12 @@ export default {
       }),
     }),
   },
+
+  // DELETE /bookings/:bookingId
+  remove: {
+    params: Joi.object({
+      bookingId: Joi.string().regex(mongoIdRegex).required(),
+    }),
+  },
+
 };
