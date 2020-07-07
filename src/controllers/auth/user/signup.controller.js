@@ -1,7 +1,9 @@
+import jwt from 'jsonwebtoken';
 import httpStatus from 'http-status';
 
 import User from '../../../models/user.model';
 import { Success, APIError } from '../../../utils';
+import env from '../../../config/env';
 
 /**
  * Signing up
@@ -29,7 +31,9 @@ export const signup = async (req, res, next) => {
     console.log(`User created ${user._id}`);
     const userObject = user.toObject();
     delete userObject.password;
-    return new Success({ data: userObject, res }).send();
+    const token = jwt.sign({ userId: user._id }, env.auth.jwt.secret);
+    console.log(`Logged in as ${user.firstName} ${user.lastName}`);
+    return new Success({ data: { user: userObject, token }, res }).send();
   } catch (err) {
     next(err);
   }
