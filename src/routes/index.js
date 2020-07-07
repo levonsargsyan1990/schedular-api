@@ -1,18 +1,26 @@
 import express from 'express';
+import authRoutes from './auth.route';
+import privateRoutes from './private.route';
+import organizationRoutes from './organization.route';
+import userRoutes from './user.route';
 
-import serviceRoutes from './service.route';
-import providerRoutes from './provider.route';
-import bookingRoutes from './booking.route';
-import optionRoutes from './option.route';
+import {
+  user as userAuthMiddleware,
+  organization as organizationAuthMiddleware,
+} from '../middleware/auth.middleware';
+
+import { checkHealth } from '../controllers/health';
 
 const router = express.Router();
 
-router.use('/services', serviceRoutes);
+router.get('/health', checkHealth);
 
-router.use('/options', optionRoutes);
+router.use('/auth', authRoutes);
 
-router.use('/providers', providerRoutes);
+router.use('/users', userAuthMiddleware, userRoutes);
 
-router.use('/bookings', bookingRoutes);
+router.use('/organizations', organizationRoutes);
+
+router.use(organizationAuthMiddleware, privateRoutes);
 
 export default router;

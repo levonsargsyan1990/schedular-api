@@ -8,8 +8,8 @@ import { APIError } from '../utils';
  * @param {Object} req - Request object
  * @param {Object} res - Response object
  */
-export const authenticate = async (req, res, next) => {
-  passport.authenticate('jwt', { session: false }, (err, user, info) => {
+export const organization = async (req, res, next) => {
+  passport.authenticate('organization-jwt', { session: false }, (err, user, info) => {
     if (err) {
       return next(new APIError({
         status: httpStatus.UNAUTHORIZED,
@@ -23,6 +23,25 @@ export const authenticate = async (req, res, next) => {
       }));
     }
     req.organization = user;
+    next();
+  })(req, res, next);
+};
+
+export const user = async (req, res, next) => {
+  passport.authenticate('user-jwt', { session: false }, (err, user, info) => {
+    if (err) {
+      return next(new APIError({
+        status: httpStatus.UNAUTHORIZED,
+        message: err.message,
+      }));
+    }
+    if (!user) {
+      return next(new APIError({
+        status: httpStatus.UNAUTHORIZED,
+        message: info ? info.message : 'User not found',
+      }));
+    }
+    req.user = user;
     next();
   })(req, res, next);
 };

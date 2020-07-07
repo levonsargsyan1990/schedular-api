@@ -124,7 +124,7 @@ export default {
       providerId: Joi.string().regex(mongoIdRegex).required(),
     }),
     query: Joi.object({
-      start: Joi.date().greater('now').timestamp(),
+      start: Joi.date().timestamp(),
       end: Joi.date().greater('now').timestamp(),
     }),
   },

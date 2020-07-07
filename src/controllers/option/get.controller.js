@@ -8,7 +8,11 @@ import { Success } from '../../utils';
  */
 export const get = (req, res, next) => {
   try {
-    const { option } = req;
+    const { option, organization } = req;
+    console.log(`
+    Fetching option ${option._id},
+    ${organization.name} organization ${organization._id}
+  `);
     return new Success({ data: option, res }).send();
   } catch (err) {
     next(err);

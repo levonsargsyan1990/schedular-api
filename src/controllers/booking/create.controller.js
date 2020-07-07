@@ -33,6 +33,12 @@ export const create = async (req, res, next) => {
         start,
       },
     } = req;
+    console.log(`Creating booking 
+      serviceId: ${serviceStringId}, 
+      optionId: ${optionStringId}, 
+      providerId: ${providerStringId}, 
+      ${organization.name} organization ${organization._id}
+    `);
 
     // Check if service exists for organization
     const serviceId = new mongoose.Types.ObjectId(serviceStringId);

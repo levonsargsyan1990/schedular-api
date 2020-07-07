@@ -15,8 +15,12 @@ export const handler = (err, req, res, next) => {
     stack: err.stack,
   };
 
+  console.log(`Error: ${response.message}`);
+
   if (variables.environment !== 'development') {
     delete response.stack;
+  } else if (response.stack) {
+    console.log(`> Stack: ${response.stack}`);
   }
 
   res.status(err.status);
@@ -29,12 +33,11 @@ export const handler = (err, req, res, next) => {
  */
 export const converter = (err, req, res, next) => {
   let convertedError = err;
-
   if (err instanceof expressValidation.ValidationError) {
     convertedError = new APIError({
       message: 'Validation Error',
       errors: err.errors,
-      status: err.status,
+      status: err.status || httpStatus.BAD_REQUEST,
       stack: err.details,
     });
   } else if (!(err instanceof APIError)) {

@@ -5,7 +5,7 @@ import Provider from './provider.model';
 import Option from './option.model';
 import { APICredentials } from '../utils';
 
-const daySchema = {
+const daySchema = new mongoose.Schema({
   working: {
     type: Boolean,
     default: true,
@@ -18,7 +18,7 @@ const daySchema = {
     type: String,
     default: '18:00',
   },
-};
+}, { _id : false, minimize: false });
 
 const workingHoursSchema = {
   monday: {
@@ -84,8 +84,24 @@ schema.method({
    *
    * @returns
    */
-  bookings() {
-    return Booking.find({ organizationId: this._id }).exec();
+  bookings({ status, start, end, serviceId, providerId }) {
+    let query = { organizationId: this._id };
+    if (status && status !== 'all') {
+      query.status = status;
+    }
+    if (serviceId) {
+      query.serviceId = serviceId;
+    }
+    if (providerId) {
+      query.providerId = providerId;
+    }
+    if (start) {
+      query.start = { $gte: start };
+    }
+    if (end) {
+      query.start = { $lte: end };
+    }
+    return Booking.find(query).exec();
   },
   /**
    * Finds all services of organization

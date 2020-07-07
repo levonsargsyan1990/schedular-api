@@ -8,11 +8,8 @@ import * as Sentry from '@sentry/node';
 import variables from './config/env';
 import { init as initDatabase } from './lib/mongo';
 import { init as initPassport } from './lib/passport';
-import { checkHealth } from './controllers/health';
-import { login } from './controllers/auth';
 import router from './routes';
 import { converter, notFound, handler } from './middleware/error';
-import { authenticate } from './middleware/auth.middleware';
 
 if (variables.environment !== 'development') {
   Sentry.init({ dsn: variables.sentry.dsn });
@@ -41,11 +38,7 @@ app.use(cors());
 // Initializing passport middleware
 app.use(passport.initialize());
 
-app.get('/health', checkHealth);
-
-app.post('/login', login);
-
-app.use(authenticate, router);
+app.use(router);
 
 // The error handler must be before any other error middleware and after all controllers
 app.use(Sentry.Handlers.errorHandler());

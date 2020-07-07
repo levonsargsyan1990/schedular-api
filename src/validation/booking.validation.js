@@ -2,6 +2,17 @@ import Joi from '@hapi/joi';
 import { mongoIdRegex } from '../constants/regex';
 
 export default {
+  // GET /bookings
+  list: {
+    query: Joi.object({
+      status: Joi.string().valid('all', 'created', 'canceled', 'completed', 'in-progress'),
+      start: Joi.date().timestamp(),
+      end: Joi.date().timestamp(),
+      serviceId: Joi.string().regex(mongoIdRegex),
+      providerId: Joi.string().regex(mongoIdRegex),
+    }),
+  },
+
   // POST /bookings
   create: {
     body: Joi.object({
@@ -42,4 +53,12 @@ export default {
       }),
     }),
   },
+
+  // DELETE /bookings/:bookingId
+  remove: {
+    params: Joi.object({
+      bookingId: Joi.string().regex(mongoIdRegex).required(),
+    }),
+  },
+
 };
