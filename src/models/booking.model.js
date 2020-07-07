@@ -15,7 +15,7 @@ const locationSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-});
+}, { _id : false });
 
 const schema = new mongoose.Schema({
   organizationId: {

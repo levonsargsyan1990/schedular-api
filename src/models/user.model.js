@@ -17,7 +17,7 @@ const organizationSchema = new mongoose.Schema({
     enum: ['member', 'owner'],
     required: true,
   },
-}, { minimize: false });
+}, { _id : false, minimize: false });
 
 const schema = new mongoose.Schema({
   firstName: {

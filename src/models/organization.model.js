@@ -18,7 +18,7 @@ const daySchema = new mongoose.Schema({
     type: String,
     default: '18:00',
   },
-}, { minimize: false });
+}, { _id : false, minimize: false });
 
 const workingHoursSchema = {
   monday: {

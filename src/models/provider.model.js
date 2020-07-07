@@ -22,7 +22,7 @@ const daySchema = new mongoose.Schema({
       return this.working ? '18:00' : '';
     },
   },
-}, { minimize: false });
+}, { _id : false, minimize: false });
 
 const workingHoursSchema = new mongoose.Schema({
   monday: {
@@ -60,7 +60,7 @@ const workingHoursSchema = new mongoose.Schema({
     default: {},
     required: true,
   },
-}, { minimize: false });
+}, { _id : false, minimize: false });
 
 const schema = new mongoose.Schema({
   organizationId: {
