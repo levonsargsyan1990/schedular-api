@@ -17,6 +17,8 @@ const {
   POSTMAN_LOCAL_ENV_ID,
   POSTMAN_STAGING_ENV_ID,
   PASSWORD_SALT_ROUNDS,
+  STRIPE_PUBLISHABLE_KEY,
+  STRIPE_SECRET_KEY,
 } = process.env;
 
 const variables = {
@@ -40,6 +42,10 @@ const variables = {
     localEnvId: POSTMAN_LOCAL_ENV_ID,
     stagingEnvId: POSTMAN_STAGING_ENV_ID,
   },
+  stripe: {
+    pubKey: STRIPE_PUBLISHABLE_KEY,
+    secretKey: STRIPE_SECRET_KEY,
+  }
 };
 
 export default variables;

@@ -1,8 +1,8 @@
 import passport from 'passport';
 import httpStatus from 'http-status';
 import jwt from 'jsonwebtoken';
-import { Success, APIError } from '../../../utils';
 
+import { Success, APIError } from '../../../utils';
 import env from '../../../config/env';
 
 /**
