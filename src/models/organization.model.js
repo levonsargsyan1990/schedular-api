@@ -76,6 +76,10 @@ const schema = new mongoose.Schema({
     required: true,
     default: {},
   },
+  stripeCustomerId: {
+    type: String,
+    required: true,
+  }
 }, { timestamps: true });
 
 schema.method({
