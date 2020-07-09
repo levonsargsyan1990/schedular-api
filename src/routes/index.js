@@ -4,6 +4,7 @@ import privateRoutes from './private.route';
 import organizationRoutes from './organization.route';
 import planRoutes from './plan.route';
 import userRoutes from './user.route';
+import integrationRoutes from './integration.route';
 
 import {
   user as userAuthMiddleware,
@@ -15,6 +16,8 @@ import { checkHealth } from '../controllers/health';
 const router = express.Router();
 
 router.get('/health', checkHealth);
+
+router.use('/integrations', integrationRoutes);
 
 router.use('/auth', authRoutes);
 

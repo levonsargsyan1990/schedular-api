@@ -10,6 +10,10 @@ const priceSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  currency: {
+    type: String,
+    required: true,
+  },
   isDefault: {
     type: Boolean,
     default: false,
@@ -27,6 +31,7 @@ const schema = new mongoose.Schema({
   },
   prices: {
     type: [priceSchema],
+    default: []
   },
   active: {
     type: Boolean,
