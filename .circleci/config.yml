@@ -45,6 +45,8 @@ jobs:
                               -e PORT='${PORT}' \
                               -e MONGO_URL='${MONGO_URL}' \
                               -e PASSWORD_SALT_FACTOR='${PASSWORD_SALT_FACTOR}' \
+                              -e STRIPE_PUBLISHABLE_KEY='${STRIPE_PUBLISHABLE_KEY}' \
+                              -e STRIPE_SECRET_KEY='${STRIPE_SECRET_KEY}' \
                               --name ${NAME} ${IMAGE}:${CIRCLE_SHA1}"
 workflows:
     version: 2.1
