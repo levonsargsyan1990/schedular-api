@@ -1,4 +1,3 @@
-import passport from 'passport';
 import httpStatus from 'http-status';
 import jwt from 'jsonwebtoken';
 import { Success, APIError } from '../../../utils';
@@ -14,7 +13,7 @@ import env from '../../../config/env';
  * @param {Object} req.body.organization - Organization to authenticate to
  * @param {*} next
  */
-export const login = (req, res, next) => {
+export const login = (req, res) => {
   try {
     const { user, organization } = req;
     console.log('Organization login attempt');

@@ -6,6 +6,7 @@ export default {
   create: {
     body: Joi.object({
       name: Joi.string().required(),
+      planId: Joi.string().required(),
     }),
   },
   // GET /organizations/:organizationId

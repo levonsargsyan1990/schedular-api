@@ -42,12 +42,28 @@ const schema = new mongoose.Schema({
 
 schema.method({
   /**
-   * Finds all providers of service
+   * Finds default price object of plan
    *
    * @returns
    */
   defaultPrice() {
     return find(this.prices, { default: true });
+  },
+  /**
+   * Finds default price of the plan
+   *
+   * @returns
+   */
+  price() {
+    return this.defaultPrice().price;
+  },
+  /**
+   * Finds default currency of the plan
+   *
+   * @returns
+   */
+  currency() {
+    return this.defaultPrice().currency;
   },
 });
 
