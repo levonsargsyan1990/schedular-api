@@ -1,5 +1,4 @@
 import express from 'express';
-import { validate } from 'express-validation';
 import {
   stripe,
 } from '../controllers/integration';
@@ -10,31 +9,31 @@ const stripeRouter = express.Router();
 
 stripeRouter
   .route('/product/create')
-  .post(stripe.createProduct)
+  .post(stripe.createProduct);
 
 stripeRouter
   .route('/product/update')
-  .post(stripe.updateProduct)
+  .post(stripe.updateProduct);
 
 stripeRouter
   .route('/product/delete')
-  .post(stripe.deleteProduct)
+  .post(stripe.deleteProduct);
 
 stripeRouter
   .route('/price/create')
-  .post(stripe.createPrice)
+  .post(stripe.createPrice);
 
 stripeRouter
   .route('/price/update')
-  .post(stripe.updatePrice)
+  .post(stripe.updatePrice);
 
 stripeRouter
   .route('/price/delete')
-  .post(stripe.deletePrice)
+  .post(stripe.deletePrice);
 
 const integrationRouter = express.Router();
 
 integrationRouter
-  .use('/stripe', stripeRouter)
+  .use('/stripe', stripeRouter);
   
 export default integrationRouter;

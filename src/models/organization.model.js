@@ -1,8 +1,11 @@
 import mongoose from 'mongoose';
+
+import User from './user.model';
 import Booking from './booking.model';
 import Service from './service.model';
 import Provider from './provider.model';
 import Option from './option.model';
+import Plan from './plan.model';
 import { APICredentials } from '../utils';
 
 const daySchema = new mongoose.Schema({
@@ -76,10 +79,10 @@ const schema = new mongoose.Schema({
     required: true,
     default: {},
   },
-  stripeCustomerId: {
+  planId: {
     type: String,
     required: true,
-  }
+  },
 }, { timestamps: true });
 
 schema.method({
@@ -148,6 +151,25 @@ schema.method({
       query.active = active;
     }
     return Option.find(query).exec();
+  },
+  /**
+   * Finds subscription plan of organization
+   *
+   * @returns {Object[]}
+   */
+  plan() {
+    return Plan.findOne({ _id: this.planId }).exec();
+  },
+  /**
+   * Finds owner of organization
+   *
+   * @returns {Object[]}
+   */
+  owner() {
+    return User.findOne({
+      'organizations.organizationId': this._id,
+      'organizations.role': 'owner',
+    }).exec();
   },
 });
 

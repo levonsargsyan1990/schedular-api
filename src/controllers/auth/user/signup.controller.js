@@ -4,6 +4,7 @@ import httpStatus from 'http-status';
 import User from '../../../models/user.model';
 import { Success, APIError } from '../../../utils';
 import env from '../../../config/env';
+import { createCustomer } from '../../../lib/stripe';
 
 /**
  * Signing up
@@ -17,16 +18,18 @@ import env from '../../../config/env';
  */
 export const signup = async (req, res, next) => {
   try {
-    const { body } = req;
-    console.log(`Signup attempt with email ${body.email}`);
-    const existingUser = await User.findOne({ email: body.email }).exec();
+    const { body, body: { email, firstName, lastName } } = req;
+    console.log(`Signup attempt with email ${email}`);
+    const existingUser = await User.findOne({ email }).exec();
     if (existingUser) {
       throw new APIError({
         status: httpStatus.BAD_REQUEST,
         message: 'User with that email already exists',
       });
     }
-    const user = new User(body);
+    // Creating Stripe customer for organization
+    const stripeCustomer = await createCustomer({ name: `${firstName} ${lastName}` });
+    const user = new User({ ...body, stripeCustomerId: stripeCustomer.id });
     await user.save();
     console.log(`User created ${user._id}`);
     const userObject = user.toObject();

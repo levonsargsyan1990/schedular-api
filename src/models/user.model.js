@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
-import find from 'lodash/find';
 
 import env from '../config/env';
 
@@ -46,6 +45,10 @@ const schema = new mongoose.Schema({
     required: true,
     min: 8,
     select: false,
+  },
+  stripeCustomerId: {
+    type: String,
+    required: true,
   },
 }, { timestamps: true });
 
