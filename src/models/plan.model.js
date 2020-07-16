@@ -47,7 +47,7 @@ schema.method({
    * @returns
    */
   defaultPrice() {
-    return find(this.prices, { default: true });
+    return find(this.prices, { isDefault: true });
   },
   /**
    * Finds default price of the plan

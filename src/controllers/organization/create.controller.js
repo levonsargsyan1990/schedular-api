@@ -3,6 +3,7 @@ import httpStatus from 'http-status';
 import Organization from '../../models/organization.model';
 import Plan from '../../models/plan.model';
 import { Success, APIError } from '../../utils';
+import { createSubscription } from '../../lib/stripe';
 
 /**
  * Creates new organization
@@ -32,10 +33,17 @@ export const create = async (req, res, next) => {
       });
     }
     // Check if non-free plan is selected
-    if (plan.price() > 0) {
+    const { price, stripePriceId } = plan.defaultPrice();
+    if (price > 0) {
       // Check if user has billing method added to her account
-      if(user.hasBillingMethod()) {
+      const card = await user.card();
+      if(card) {
         // Start a subscription
+        const subscription = await createSubscription({
+          customerId: user.stripeCustomerId,
+          priceId: stripePriceId,
+        });
+        body.stripeSubscriptionId = subscription.id;
       } else {
         throw new APIError({
           status: httpStatus.BAD_REQUEST,

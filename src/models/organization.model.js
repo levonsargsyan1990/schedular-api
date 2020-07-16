@@ -83,6 +83,9 @@ const schema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  stripeSubscriptionId: {
+    type: String,
+  }
 }, { timestamps: true });
 
 schema.method({

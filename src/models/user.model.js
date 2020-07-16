@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 
+import Card from './card.model';
 import env from '../config/env';
 
 const { ObjectId } = mongoose.Schema.Types;
@@ -79,6 +80,36 @@ schema.method({
    */
   async comparePassword(candidatePassword) {
     return bcrypt.compare(candidatePassword, this.password);
+  },
+
+  /**
+   * Finds default card of user
+   *
+   * @param {String} candidatePassword time period to check
+   * @returns {Boolean}
+   */
+  async card() {
+    return Card.findOne({ userId: this._id, isDefault: true }).exec();
+  },
+
+  /**
+   * Finds all cards of user
+   *
+   * @param {String} candidatePassword time period to check
+   * @returns {Boolean}
+   */
+  async cards() {
+    return Card.find({ userId: this._id }).exec();
+  },
+
+  /**
+   * Finds all cards of user
+   *
+   * @param {String} candidatePassword time period to check
+   * @returns {Boolean}
+   */
+  async hasBillingMethod() {
+    return !!await this.card();
   },
 
   /**

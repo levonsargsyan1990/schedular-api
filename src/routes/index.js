@@ -1,9 +1,11 @@
 import express from 'express';
 import authRoutes from './auth.route';
-import privateRoutes from './private.route';
+// import userPrivateRoutes from './userPrivate.route';
+import organizationPrivateRoutes from './organizationPrivate.route';
 import organizationRoutes from './organization.route';
 import planRoutes from './plan.route';
 import userRoutes from './user.route';
+import cardRoutes from './card.route';
 import integrationRoutes from './integration.route';
 
 import {
@@ -23,10 +25,14 @@ router.use('/auth', authRoutes);
 
 router.use('/users', userAuthMiddleware, userRoutes);
 
+router.use('/cards', userAuthMiddleware, cardRoutes);
+
 router.use('/organizations', organizationRoutes);
 
 router.use('/plans', planRoutes);
 
-router.use(organizationAuthMiddleware, privateRoutes);
+// router.use(userAuthMiddleware, userPrivateRoutes);
+
+router.use(organizationAuthMiddleware, organizationPrivateRoutes);
 
 export default router;
