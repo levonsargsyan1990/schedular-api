@@ -6,7 +6,10 @@ import Service from './service.model';
 import Provider from './provider.model';
 import Option from './option.model';
 import Plan from './plan.model';
+import Subscription from './subscription,model';
 import { APICredentials } from '../utils';
+
+const { ObjectId } = mongoose.Schema.Types;
 
 const daySchema = new mongoose.Schema({
   working: {
@@ -80,15 +83,24 @@ const schema = new mongoose.Schema({
     default: {},
   },
   planId: {
-    type: String,
+    type: ObjectId,
     required: true,
   },
-  stripeSubscriptionId: {
-    type: String,
+  subscriptionId: {
+    type: ObjectId,
+    required: true,
   }
 }, { timestamps: true });
 
 schema.method({
+  /**
+   * Finds organizations subscription
+   *
+   * @returns
+   */
+  subscription() {
+    return Subscription.findOne({ _id: this.subscriptionId }).exec();
+  },
   /**
    * Finds all bookings of organization
    *

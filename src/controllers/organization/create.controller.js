@@ -2,6 +2,7 @@ import httpStatus from 'http-status';
 
 import Organization from '../../models/organization.model';
 import Plan from '../../models/plan.model';
+import Subscription from '../../models/subscription,model';
 import { Success, APIError } from '../../utils';
 import { createSubscription } from '../../lib/stripe';
 
@@ -39,11 +40,15 @@ export const create = async (req, res, next) => {
       const card = await user.card();
       if(card) {
         // Start a subscription
-        const subscription = await createSubscription({
+        const stripeSubscription = await createSubscription({
           customerId: user.stripeCustomerId,
           priceId: stripePriceId,
         });
-        body.stripeSubscriptionId = subscription.id;
+        const subscription = new Subscription({
+          stripeSubscriptionId: stripeSubscription.id,
+        });
+        await subscription.save();
+        body.subscriptionId = subscription._id;
       } else {
         throw new APIError({
           status: httpStatus.BAD_REQUEST,
