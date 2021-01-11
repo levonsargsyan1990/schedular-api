@@ -11,31 +11,22 @@ import Organization from '../models/organization.model';
  *
  * @param {Object} req - Request object
  * @param {Object} req.user - Authenticated user
- * @param {Object} req.body - Request body
- * @param {Object} req.body.organizationId - ID of organization
+ * @param {Object} req.organization - Organization
  */
 export const isOwnerOfOrganization = async (req, res, next) => {
   try {
     const {
-      user,
-      body: { organizationId: organizationStringId },
+      user, organization,
     } = req;
-    const organizationId = new mongoose.Types.ObjectId(organizationStringId);
-    const organization = await Organization.findOne({ _id: organizationId }).exec();
-    if (!organization) {
-      throw new APIError({
-        status: httpStatus.BAD_REQUEST,
-        message: 'No organization found with that ID',
-      });
-    }
-    const foundOrganization = find(user.organizations, { organizationId });
-    if (!foundOrganization) {
+    const isMember = await user.isMember(organization._id);
+    const isOwner = await user.isOwner(organization._id);
+    if (!isMember) {
       throw new APIError({
         status: httpStatus.UNAUTHORIZED,
         message: 'Not a member of organization',
       });
     }
-    if (foundOrganization.role !== 'owner') {
+    if (!isOwner) {
       throw new APIError({
         status: httpStatus.UNAUTHORIZED,
         message: 'Not the owner of organization',
@@ -52,26 +43,17 @@ export const isOwnerOfOrganization = async (req, res, next) => {
  * Checking if user is a member of organization
  *
  * @param {Object} req - Request object
+ * @param {Object} req.organization - Organization
  * @param {Object} req.user - Authenticated user
- * @param {Object} req.body - Request body
- * @param {Object} req.body.organizationId - ID of organization
  */
 export const isMemberOfOrganization = async (req, res, next) => {
   try {
     const {
-      user,
-      body: { organizationId: organizationStringId },
+      user, organization,
     } = req;
-    const organizationId = new mongoose.Types.ObjectId(organizationStringId);
-    const organization = await Organization.findOne({ _id: organizationId }).exec();
-    if (!organization) {
-      throw new APIError({
-        status: httpStatus.BAD_REQUEST,
-        message: 'No organization found with that ID',
-      });
-    }
-    const foundOrganization = find(user.organizations, { organizationId });
-    if (!foundOrganization) {
+    const isMember = await user.isMember(organization._id);
+    console.log('IS MEMBER', isMember);
+    if (!isMember) {
       throw new APIError({
         status: httpStatus.UNAUTHORIZED,
         message: 'Not a member of organization',

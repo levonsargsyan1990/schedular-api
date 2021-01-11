@@ -88,7 +88,6 @@ const schema = new mongoose.Schema({
   },
   subscriptionId: {
     type: ObjectId,
-    required: true,
   }
 }, { timestamps: true });
 

@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
+import find from 'lodash/find';
 
 import Card from './card.model';
 import env from '../config/env';
@@ -72,6 +73,27 @@ schema.pre('save', async function (next) {
 });
 
 schema.method({
+  /**
+   * Checks if user is owner of organization
+   *
+   * @param {String} organizationId ID of organization to check
+   * @returns {Boolean}
+   */
+
+  async isOwner(organizationId) {
+    return !!find(this.organizations, { organizationId })
+  },
+
+  /**
+   * Checks if user is member of organization
+   *
+   * @param {String} organizationId ID of organization to check
+   * @returns {Boolean}
+   */
+  async isMember(organizationId) {
+    return !!find(this.organizations, { organizationId, role: 'member' })
+  },
+
   /**
    * Checks if password is correct
    *

@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/levonsargsyan1990/schedular-api#readme",
   "dependencies": {
+    "@babel/compat-data": "^7.11.0",
     "@hapi/joi": "^17.1.1",
     "@sentry/node": "^5.14.2",
     "axios": "^0.19.2",

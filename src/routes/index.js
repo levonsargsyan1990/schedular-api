@@ -27,7 +27,7 @@ router.use('/users', userAuthMiddleware, userRoutes);
 
 router.use('/cards', userAuthMiddleware, cardRoutes);
 
-router.use('/organizations', organizationRoutes);
+router.use('/organizations', userAuthMiddleware, organizationRoutes);
 
 router.use('/plans', planRoutes);
 
