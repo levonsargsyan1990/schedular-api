@@ -8,6 +8,10 @@ const schema = new mongoose.Schema({
   stripeSubscriptionId: {
     type: String,
     required: true,
+  },
+  stripeSubscriptionItemId: {
+    type: String,
+    required: true,
   }
 }, { timestamps: true });
 
@@ -26,7 +30,7 @@ schema.method({
    * @returns
    */
   async payer() {
-    const organization = await this.organization(); 
+    const organization = await this.organization();
     return organization.owner();
   },
 });

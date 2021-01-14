@@ -18,7 +18,7 @@ const organizationSchema = new mongoose.Schema({
     enum: ['member', 'owner'],
     required: true,
   },
-}, { _id : false, minimize: false });
+}, { _id: false, minimize: false });
 
 const schema = new mongoose.Schema({
   firstName: {
@@ -142,7 +142,7 @@ schema.method({
    * @param {String} params.role Role of user in new organization
    * @returns {User}
    */
-  // async addOrganization({ organizationId, role = 'member' }) {
+  // async createOrganization({ organizationId, role = 'member' }) {
   //   // TODO: check for limit of organizations
   //   const organization = find(this.organizations, { organizationId });
   //   console.log({ organization });

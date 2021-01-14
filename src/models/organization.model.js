@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import httpStatus from 'http-status';
 
 import User from './user.model';
 import Booking from './booking.model';
@@ -6,8 +7,14 @@ import Service from './service.model';
 import Provider from './provider.model';
 import Option from './option.model';
 import Plan from './plan.model';
-import Subscription from './subscription,model';
-import { APICredentials } from '../utils';
+import Subscription from './subscription.model';
+import { APICredentials, APIError } from '../utils';
+import {
+  createSubscription,
+  updateSubscription,
+  updateSubscriptionItem,
+  cancelSubscription
+} from '../lib/stripe';
 
 const { ObjectId } = mongoose.Schema.Types;
 
@@ -24,7 +31,7 @@ const daySchema = new mongoose.Schema({
     type: String,
     default: '18:00',
   },
-}, { _id : false, minimize: false });
+}, { _id: false, minimize: false });
 
 const workingHoursSchema = {
   monday: {
@@ -85,6 +92,11 @@ const schema = new mongoose.Schema({
   planId: {
     type: ObjectId,
     required: true,
+    set: function (planId) {
+      // Caching previous planId
+      this._planId = this.planId;
+      return planId;
+    }
   },
   subscriptionId: {
     type: ObjectId,
@@ -175,6 +187,14 @@ schema.method({
     return Plan.findOne({ _id: this.planId }).exec();
   },
   /**
+   * Finds previous subscription plan of organization
+   *
+   * @returns {Object[]}
+   */
+  previousPlan() {
+    return Plan.findOne({ _id: this._planId }).exec();
+  },
+  /**
    * Finds owner of organization
    *
    * @returns {Object[]}
@@ -185,6 +205,75 @@ schema.method({
       'organizations.role': 'owner',
     }).exec();
   },
+});
+
+schema.pre('save', async function (next) {
+  const isPlanModified = this.isModified('planId');
+
+  if (isPlanModified) {
+    const plan = await this.plan();
+    if (!plan) {
+      const error = new APIError({
+        status: httpStatus.BAD_REQUEST,
+        message: `No subscription plan found with ID ${this.planId}`,
+      });
+      return next(error);
+    }
+    if (!plan.active) {
+      const error = new APIError({
+        status: httpStatus.BAD_REQUEST,
+        message: `Subscription plan with ID ${plan._id} is inactive`,
+      });
+      return next(error);
+    }
+    // Check if non-free plan is selected
+    const { price, stripePriceId } = plan.defaultPrice();
+    if (price > 0) {
+      const owner = await this.owner();
+      // Check if user has billing method added to her account
+      const card = await owner.card();
+      if (card) {
+        // Check if there was already a paid subscription
+        if (this.isNew || !this.subscriptionId) {
+          // Start new subscription if there was non
+          const stripeSubscription = await createSubscription({
+            customerId: owner.stripeCustomerId,
+            priceId: stripePriceId,
+          });
+          const [{ id: stripeSubscriptionItemId }] = stripeSubscription.items.data;
+          const subscription = new Subscription({
+            stripeSubscriptionId: stripeSubscription.id,
+            stripeSubscriptionItemId,
+          });
+          await subscription.save();
+          this.subscriptionId = subscription._id;
+        } else {
+          // Update subscription
+          const subscription = await this.subscription();
+          await updateSubscription({
+            subscriptionId: subscription.stripeSubscriptionId,
+            subscriptionItemId: subscription.stripeSubscriptionItemId,
+            priceId: stripePriceId,
+          });
+        }
+      } else {
+        throw new APIError({
+          status: httpStatus.BAD_REQUEST,
+          message: 'User doesn\'t have billing method',
+        });
+      }
+    } else {
+      // Cancel previous subscription if moving to free plan
+      if (this.subscriptionId) {
+        const subscription = await this.subscription();
+        await cancelSubscription({ subscriptionId: subscription.stripeSubscriptionId });
+        await subscription.remove();
+        this.subscriptionId = undefined;
+      }
+    }
+
+    next();
+  }
 });
 
 const Organization = mongoose.model('Organization', schema);

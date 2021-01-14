@@ -75,3 +75,19 @@ export const createSubscription = async ({ customerId, priceId }) => {
   });
   return subscription;
 };
+
+export const updateSubscription = async ({ subscriptionId, subscriptionItemId, priceId }) => {
+  const subscription = await stripe.subscriptions.update(subscriptionId, {
+    items: [
+      {
+        id: subscriptionItemId,
+        price: priceId
+      },
+    ],
+  });
+  return subscription;
+};
+
+export const cancelSubscription = async ({ subscriptionId }) => {
+  return await stripe.subscriptions.del(subscriptionId);
+};
