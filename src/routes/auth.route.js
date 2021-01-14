@@ -11,6 +11,9 @@ import {
 import {
   isMemberOfOrganization,
 } from '../middleware/user.middleware';
+import {
+  organizationExistsAuth
+} from '../middleware/organization.middleware';
 
 // Organization authentication routes
 const organizationRouter = express.Router();
@@ -19,6 +22,7 @@ organizationRouter
   .post(
     validate(authValidation.organization.login),
     userAuthMiddleware,
+    organizationExistsAuth,
     isMemberOfOrganization,
     organization.login,
   );

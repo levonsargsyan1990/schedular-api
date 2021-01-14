@@ -15,4 +15,14 @@ export default {
       organizationId: Joi.string().regex(mongoIdRegex).required(),
     }),
   },
+  // PATCH /organizations/:organizationId
+  update: {
+    params: Joi.object({
+      organizationId: Joi.string().regex(mongoIdRegex).required(),
+    }),
+    body: Joi.object({
+      name: Joi.string(),
+      planId: Joi.string(),
+    }),
+  },
 };

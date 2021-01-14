@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
+import find from 'lodash/find';
 
+import Card from './card.model';
 import env from '../config/env';
 
 const { ObjectId } = mongoose.Schema.Types;
@@ -16,7 +18,7 @@ const organizationSchema = new mongoose.Schema({
     enum: ['member', 'owner'],
     required: true,
   },
-}, { _id : false, minimize: false });
+}, { _id: false, minimize: false });
 
 const schema = new mongoose.Schema({
   firstName: {
@@ -72,6 +74,27 @@ schema.pre('save', async function (next) {
 
 schema.method({
   /**
+   * Checks if user is owner of organization
+   *
+   * @param {String} organizationId ID of organization to check
+   * @returns {Boolean}
+   */
+
+  async isOwner(organizationId) {
+    return !!find(this.organizations, { organizationId })
+  },
+
+  /**
+   * Checks if user is member of organization
+   *
+   * @param {String} organizationId ID of organization to check
+   * @returns {Boolean}
+   */
+  async isMember(organizationId) {
+    return !!find(this.organizations, { organizationId, role: 'member' })
+  },
+
+  /**
    * Checks if password is correct
    *
    * @param {String} candidatePassword time period to check
@@ -82,6 +105,36 @@ schema.method({
   },
 
   /**
+   * Finds default card of user
+   *
+   * @param {String} candidatePassword time period to check
+   * @returns {Boolean}
+   */
+  async card() {
+    return Card.findOne({ userId: this._id, isDefault: true }).exec();
+  },
+
+  /**
+   * Finds all cards of user
+   *
+   * @param {String} candidatePassword time period to check
+   * @returns {Boolean}
+   */
+  async cards() {
+    return Card.find({ userId: this._id }).exec();
+  },
+
+  /**
+   * Finds all cards of user
+   *
+   * @param {String} candidatePassword time period to check
+   * @returns {Boolean}
+   */
+  async hasBillingMethod() {
+    return !!await this.card();
+  },
+
+  /**
    * Adds new organization
    *
    * @param {Object} params New organization parameters
@@ -89,7 +142,7 @@ schema.method({
    * @param {String} params.role Role of user in new organization
    * @returns {User}
    */
-  // async addOrganization({ organizationId, role = 'member' }) {
+  // async createOrganization({ organizationId, role = 'member' }) {
   //   // TODO: check for limit of organizations
   //   const organization = find(this.organizations, { organizationId });
   //   console.log({ organization });

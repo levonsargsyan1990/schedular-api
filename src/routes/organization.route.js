@@ -1,23 +1,22 @@
 import express from 'express';
 import { validate } from 'express-validation';
 import {
-  get, list, create,
+  get, list, create, update
 } from '../controllers/organization';
 import organizationValidation from '../validation/organization.validation';
-import {
-  user as userAuthMiddleware,
-  organization as organizationAuthMiddleware,
-} from '../middleware/auth.middleware';
+import { isMemberOfOrganization, isOwnerOfOrganization } from '../middleware/user.middleware';
+import { organizationExists } from '../middleware/organization.middleware';
 
 const router = express.Router();
 
 router
   .route('/')
-  .get(userAuthMiddleware, list)
-  .post(userAuthMiddleware, validate(organizationValidation.create), create);
+  .get(list)
+  .post(validate(organizationValidation.create), create);
 
 router
   .route('/:organizationId')
-  .get(organizationAuthMiddleware, validate(organizationValidation.get), get);
+  .get(organizationExists, isMemberOfOrganization, validate(organizationValidation.get), get)
+  .patch(organizationExists, isOwnerOfOrganization, validate(organizationValidation.update), update);
 
 export default router;
